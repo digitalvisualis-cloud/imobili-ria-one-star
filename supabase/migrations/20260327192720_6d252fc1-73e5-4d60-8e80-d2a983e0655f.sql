@@ -43,7 +43,7 @@ CREATE TRIGGER update_config_site_updated_at
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- Insert default config
-INSERT INTO public.config_site (nome_imobiliaria) VALUES ('André Monteiro Imóveis');
+INSERT INTO public.config_site (nome_imobiliaria) VALUES ('Imobiliária One Star');
 
 -- Create imoveis table
 CREATE TABLE public.imoveis (
