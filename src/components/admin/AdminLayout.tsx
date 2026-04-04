@@ -23,6 +23,7 @@ const navItems: NavItem[] = [
   { to: '/admin/api-logs', label: 'Logs da API', icon: Activity, roles: ['admin'] },
   { to: '/admin/api-docs', label: 'Documentação da API', icon: BookOpen, roles: ['admin', 'editor', 'viewer'] },
   { to: '/admin/usuarios', label: 'Usuários', icon: Users, roles: ['admin'] },
+  { to: '/admin/leads', label: 'Leads', icon: MessageSquare, roles: ['admin', 'editor', 'viewer'] },
 ];
 
 export function AdminLayout() {

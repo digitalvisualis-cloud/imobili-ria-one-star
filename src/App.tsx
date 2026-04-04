@@ -69,6 +69,7 @@ const App = () => (
                 <Route path="ia-config" element={<AiConfig />} />
                 <Route path="api-logs" element={<ApiLogs />} />
                 <Route path="usuarios" element={<Users />} />
+                <Route path="leads" element={<Leads />} />
               </Route>
             </Route>
 
