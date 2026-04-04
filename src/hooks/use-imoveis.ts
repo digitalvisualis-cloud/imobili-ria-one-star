@@ -100,7 +100,7 @@ export function useUpdateImovel() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, ...updates }: Partial<Imovel> & { id: string }) => {
-      const { error } = await supabase.from('imoveis').update(updates as any).eq('id', id);
+      const { error } = await (supabase.from as any)('imoveis').update(updates as any).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
