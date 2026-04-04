@@ -29,6 +29,7 @@ import AiLogs from "./pages/admin/AiLogs";
 import ApiDocs from "./pages/admin/ApiDocs";
 import ApiLogs from "./pages/admin/ApiLogs";
 import Users from "./pages/admin/Users";
+import Leads from "./pages/admin/Leads";
 
 const queryClient = new QueryClient();
 
@@ -68,6 +69,7 @@ const App = () => (
                 <Route path="ia-config" element={<AiConfig />} />
                 <Route path="api-logs" element={<ApiLogs />} />
                 <Route path="usuarios" element={<Users />} />
+                <Route path="leads" element={<Leads />} />
               </Route>
             </Route>
 

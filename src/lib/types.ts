@@ -83,6 +83,28 @@ export function formatCurrency(value: number): string {
   }).format(value);
 }
 
+export interface Lead {
+  identificador_lead: string;
+  'Inicio do atendimento': string | null;
+  Nome: string | null;
+  Whatsapp: string | null;
+  'Tipo de imovel': string | null;
+  Finalidade: string | null;
+  'Bairro desejado': string | null;
+  'Resumo da conversa': string | null;
+  'Data da visita': string | null;
+  'Marcou no Grupo': string | null;
+  'Timestamp ultima msg': string | null;
+  'Follow UP 1': string | null;
+  'Follow UP 2': string | null;
+  'Follow UP 3': string | null;
+  'IDConta ChatWoot': string | null;
+  'IDConversa ChatWoot': string | null;
+  'IDLead ChatWoot': string | null;
+  'InboxID ChatWoot': string | null;
+  id_agendamento: string | null;
+}
+
 export function buildWhatsAppLink(phone: string, message: string): string {
   const cleaned = phone.replace(/\D/g, '');
   return `https://wa.me/${cleaned}?text=${encodeURIComponent(message)}`;

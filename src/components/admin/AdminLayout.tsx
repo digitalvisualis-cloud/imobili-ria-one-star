@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
-import { Settings, Building2, ExternalLink, KeyRound, Brain, ScrollText, BookOpen, Users, Activity, LogOut } from 'lucide-react';
+import { Settings, Building2, ExternalLink, KeyRound, Brain, ScrollText, BookOpen, Users, Activity, LogOut, MessageSquare } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { useAuth, AppRole } from '@/contexts/AuthContext';
@@ -23,6 +23,7 @@ const navItems: NavItem[] = [
   { to: '/admin/api-logs', label: 'Logs da API', icon: Activity, roles: ['admin'] },
   { to: '/admin/api-docs', label: 'Documentação da API', icon: BookOpen, roles: ['admin', 'editor', 'viewer'] },
   { to: '/admin/usuarios', label: 'Usuários', icon: Users, roles: ['admin'] },
+  { to: '/admin/leads', label: 'Leads', icon: MessageSquare, roles: ['admin', 'editor', 'viewer'] },
 ];
 
 export function AdminLayout() {
