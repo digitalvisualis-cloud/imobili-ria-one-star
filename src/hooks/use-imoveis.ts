@@ -32,8 +32,7 @@ export function useAllImoveis(search?: string, filterPublicado?: boolean | null,
   return useQuery({
     queryKey: ['imoveis', 'admin', search, filterPublicado, filterDestaque, filterTipo, filterFinalidade],
     queryFn: async (): Promise<Imovel[]> => {
-      let query = supabase
-        .from('imoveis')
+      let query = (supabase.from as any)('imoveis')
         .select('*')
         .order('destaque', { ascending: false })
         .order('updated_at', { ascending: false });
