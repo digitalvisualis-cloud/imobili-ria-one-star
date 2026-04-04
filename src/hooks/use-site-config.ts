@@ -6,8 +6,7 @@ export function useSiteConfig() {
   return useQuery({
     queryKey: ['config_site'],
     queryFn: async (): Promise<ConfigSite> => {
-      const { data, error } = await supabase
-        .from('config_site')
+      const { data, error } = await (supabase.from as any)('config_site')
         .select('*')
         .limit(1)
         .single();
