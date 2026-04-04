@@ -27,7 +27,7 @@ export default function ApiKeys() {
   const { data: keys = [], isLoading } = useQuery({
     queryKey: ['api-keys'],
     queryFn: async () => {
-      const { data } = await supabase.from('api_keys').select('*').order('created_at', { ascending: false });
+      const { data } = await (supabase.from as any)('api_keys').select('*').order('created_at', { ascending: false });
       return data || [];
     },
   });
