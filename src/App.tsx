@@ -19,6 +19,7 @@ import Login from "./pages/Login";
 import RecoverPassword from "./pages/RecoverPassword";
 import ResetPassword from "./pages/ResetPassword";
 import ChangePassword from "./pages/ChangePassword";
+import SupabaseConfig from "./pages/SupabaseConfig";
 
 import SiteConfig from "./pages/admin/SiteConfig";
 import Properties from "./pages/admin/Properties";
@@ -54,6 +55,7 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/recuperar-senha" element={<RecoverPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/conectar-supabase" element={<SupabaseConfig />} />
             <Route path="/trocar-senha" element={<ChangePassword />} />
 
             {/* Admin routes - protected */}
