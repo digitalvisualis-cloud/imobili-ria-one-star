@@ -37,7 +37,7 @@ export default function ApiKeys() {
       const rawKey = crypto.randomUUID() + '-' + crypto.randomUUID();
       const keyHash = await hashKey(rawKey);
       const keyPreview = rawKey.slice(-8);
-      await supabase.from('api_keys').insert({ name, key_hash: keyHash, key_preview: keyPreview });
+      await (supabase.from as any)('api_keys').insert({ name, key_hash: keyHash, key_preview: keyPreview });
       return rawKey;
     },
     onSuccess: (rawKey) => {
