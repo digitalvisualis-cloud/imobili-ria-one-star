@@ -71,8 +71,7 @@ export function useImovelByCodigo(codigo: string) {
   return useQuery({
     queryKey: ['imovel', 'codigo', codigo],
     queryFn: async (): Promise<Imovel | null> => {
-      const { data, error } = await supabase
-        .from('imoveis')
+      const { data, error } = await (supabase.from as any)('imoveis')
         .select('*')
         .eq('codigo_imovel', codigo)
         .eq('publicado', true)
