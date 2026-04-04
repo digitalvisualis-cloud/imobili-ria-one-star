@@ -13,7 +13,7 @@ export default function ApiLogs() {
   const { data: logs = [], isLoading } = useQuery({
     queryKey: ['api-request-logs', statusFilter],
     queryFn: async () => {
-      let q = supabase.from('api_request_logs').select('*, api_keys(name, key_preview)').order('created_at', { ascending: false }).limit(200);
+      let q = (supabase.from as any)('api_request_logs').select('*, api_keys(name, key_preview)').order('created_at', { ascending: false }).limit(200);
       if (statusFilter !== 'all') {
         const code = parseInt(statusFilter);
         if (code === 200) q = q.gte('status_code', 200).lt('status_code', 300);

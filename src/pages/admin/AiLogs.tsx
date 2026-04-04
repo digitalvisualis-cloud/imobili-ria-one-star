@@ -13,7 +13,7 @@ export default function AiLogs() {
   const { data: logs = [], isLoading } = useQuery({
     queryKey: ['ai-logs', statusFilter],
     queryFn: async () => {
-      let q = supabase.from('ai_search_logs').select('*').order('created_at', { ascending: false }).limit(100);
+      let q = (supabase.from as any)('ai_search_logs').select('*').order('created_at', { ascending: false }).limit(100);
       if (statusFilter !== 'all') q = q.eq('status', statusFilter);
       const { data } = await q;
       return data || [];

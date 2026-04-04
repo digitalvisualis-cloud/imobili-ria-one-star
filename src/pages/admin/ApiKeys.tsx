@@ -49,7 +49,7 @@ export default function ApiKeys() {
 
   const revokeMutation = useMutation({
     mutationFn: async (id: string) => {
-      await supabase.from('api_keys').update({ active: false }).eq('id', id);
+      await (supabase.from as any)('api_keys').update({ active: false }).eq('id', id);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['api-keys'] });
