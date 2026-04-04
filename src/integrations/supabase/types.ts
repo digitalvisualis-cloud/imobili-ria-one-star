@@ -10,383 +10,73 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.5"
+    PostgrestVersion: "14.4"
   }
   public: {
     Tables: {
-      ai_config: {
+      IMOBILIARIA_ANDRE: {
         Row: {
-          api_key_encrypted: string | null
-          created_at: string
-          default_mode: string
-          id: string
-          max_tokens: number | null
-          model: string
-          provider: string
-          updated_at: string
+          "Bairro desejado": string | null
+          "Data da visita": string | null
+          Finalidade: string | null
+          "Follow UP 1": string | null
+          "Follow UP 2": string | null
+          "Follow UP 3": string | null
+          id_agendamento: string | null
+          "IDConta ChatWoot": string | null
+          "IDConversa ChatWoot": string | null
+          identificador_lead: string
+          "IDLead ChatWoot": string | null
+          "InboxID ChatWoot": string | null
+          "Inicio do atendimento": string | null
+          "Marcou no Grupo": string | null
+          Nome: string | null
+          "Resumo da conversa": string | null
+          "Timestamp ultima msg": string | null
+          "Tipo de imovel": string | null
+          Whatsapp: string | null
         }
         Insert: {
-          api_key_encrypted?: string | null
-          created_at?: string
-          default_mode?: string
-          id?: string
-          max_tokens?: number | null
-          model?: string
-          provider?: string
-          updated_at?: string
+          "Bairro desejado"?: string | null
+          "Data da visita"?: string | null
+          Finalidade?: string | null
+          "Follow UP 1"?: string | null
+          "Follow UP 2"?: string | null
+          "Follow UP 3"?: string | null
+          id_agendamento?: string | null
+          "IDConta ChatWoot"?: string | null
+          "IDConversa ChatWoot"?: string | null
+          identificador_lead?: string
+          "IDLead ChatWoot"?: string | null
+          "InboxID ChatWoot"?: string | null
+          "Inicio do atendimento"?: string | null
+          "Marcou no Grupo"?: string | null
+          Nome?: string | null
+          "Resumo da conversa"?: string | null
+          "Timestamp ultima msg"?: string | null
+          "Tipo de imovel"?: string | null
+          Whatsapp?: string | null
         }
         Update: {
-          api_key_encrypted?: string | null
-          created_at?: string
-          default_mode?: string
-          id?: string
-          max_tokens?: number | null
-          model?: string
-          provider?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      ai_search_logs: {
-        Row: {
-          created_at: string
-          estimated_cost: number | null
-          filters_extracted: Json | null
-          id: string
-          model: string | null
-          provider: string | null
-          query: string
-          response_time_ms: number | null
-          result_ids: string[] | null
-          results_count: number | null
-          status: string
-          tokens_used: number | null
-        }
-        Insert: {
-          created_at?: string
-          estimated_cost?: number | null
-          filters_extracted?: Json | null
-          id?: string
-          model?: string | null
-          provider?: string | null
-          query: string
-          response_time_ms?: number | null
-          result_ids?: string[] | null
-          results_count?: number | null
-          status?: string
-          tokens_used?: number | null
-        }
-        Update: {
-          created_at?: string
-          estimated_cost?: number | null
-          filters_extracted?: Json | null
-          id?: string
-          model?: string | null
-          provider?: string | null
-          query?: string
-          response_time_ms?: number | null
-          result_ids?: string[] | null
-          results_count?: number | null
-          status?: string
-          tokens_used?: number | null
-        }
-        Relationships: []
-      }
-      api_keys: {
-        Row: {
-          active: boolean
-          created_at: string
-          created_by_user_id: string | null
-          id: string
-          key_hash: string
-          key_preview: string
-          last_used_at: string | null
-          name: string
-        }
-        Insert: {
-          active?: boolean
-          created_at?: string
-          created_by_user_id?: string | null
-          id?: string
-          key_hash: string
-          key_preview: string
-          last_used_at?: string | null
-          name?: string
-        }
-        Update: {
-          active?: boolean
-          created_at?: string
-          created_by_user_id?: string | null
-          id?: string
-          key_hash?: string
-          key_preview?: string
-          last_used_at?: string | null
-          name?: string
-        }
-        Relationships: []
-      }
-      api_request_logs: {
-        Row: {
-          api_key_id: string | null
-          created_at: string | null
-          endpoint: string
-          id: string
-          ip_address: string | null
-          method: string
-          response_time_ms: number | null
-          status_code: number | null
-        }
-        Insert: {
-          api_key_id?: string | null
-          created_at?: string | null
-          endpoint: string
-          id?: string
-          ip_address?: string | null
-          method: string
-          response_time_ms?: number | null
-          status_code?: number | null
-        }
-        Update: {
-          api_key_id?: string | null
-          created_at?: string | null
-          endpoint?: string
-          id?: string
-          ip_address?: string | null
-          method?: string
-          response_time_ms?: number | null
-          status_code?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "api_request_logs_api_key_id_fkey"
-            columns: ["api_key_id"]
-            isOneToOne: false
-            referencedRelation: "api_keys"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      config_site: {
-        Row: {
-          created_at: string
-          email: string | null
-          endereco_texto: string | null
-          favicon_url: string | null
-          google_maps_url: string | null
-          id: string
-          logo_url: string | null
-          nome_imobiliaria: string
-          politica_cookies: string | null
-          politica_privacidade: string | null
-          termos_uso: string | null
-          updated_at: string
-          whatsapp: string | null
-        }
-        Insert: {
-          created_at?: string
-          email?: string | null
-          endereco_texto?: string | null
-          favicon_url?: string | null
-          google_maps_url?: string | null
-          id?: string
-          logo_url?: string | null
-          nome_imobiliaria?: string
-          politica_cookies?: string | null
-          politica_privacidade?: string | null
-          termos_uso?: string | null
-          updated_at?: string
-          whatsapp?: string | null
-        }
-        Update: {
-          created_at?: string
-          email?: string | null
-          endereco_texto?: string | null
-          favicon_url?: string | null
-          google_maps_url?: string | null
-          id?: string
-          logo_url?: string | null
-          nome_imobiliaria?: string
-          politica_cookies?: string | null
-          politica_privacidade?: string | null
-          termos_uso?: string | null
-          updated_at?: string
-          whatsapp?: string | null
-        }
-        Relationships: []
-      }
-      imoveis: {
-        Row: {
-          area_m2: number | null
-          bairro: string | null
-          banheiros: number | null
-          capa_url: string | null
-          cidade: string | null
-          codigo_imovel: string
-          created_at: string
-          descricao: string | null
-          destaque: boolean | null
-          estado: string | null
-          finalidade: Database["public"]["Enums"]["finalidade_imovel"]
-          id: string
-          imagens: string[] | null
-          mapa_url: string | null
-          preco: number
-          publicado: boolean | null
-          quartos: number | null
-          tipo: Database["public"]["Enums"]["tipo_imovel"]
-          titulo: string
-          updated_at: string
-          vagas: number | null
-        }
-        Insert: {
-          area_m2?: number | null
-          bairro?: string | null
-          banheiros?: number | null
-          capa_url?: string | null
-          cidade?: string | null
-          codigo_imovel: string
-          created_at?: string
-          descricao?: string | null
-          destaque?: boolean | null
-          estado?: string | null
-          finalidade?: Database["public"]["Enums"]["finalidade_imovel"]
-          id?: string
-          imagens?: string[] | null
-          mapa_url?: string | null
-          preco?: number
-          publicado?: boolean | null
-          quartos?: number | null
-          tipo?: Database["public"]["Enums"]["tipo_imovel"]
-          titulo: string
-          updated_at?: string
-          vagas?: number | null
-        }
-        Update: {
-          area_m2?: number | null
-          bairro?: string | null
-          banheiros?: number | null
-          capa_url?: string | null
-          cidade?: string | null
-          codigo_imovel?: string
-          created_at?: string
-          descricao?: string | null
-          destaque?: boolean | null
-          estado?: string | null
-          finalidade?: Database["public"]["Enums"]["finalidade_imovel"]
-          id?: string
-          imagens?: string[] | null
-          mapa_url?: string | null
-          preco?: number
-          publicado?: boolean | null
-          quartos?: number | null
-          tipo?: Database["public"]["Enums"]["tipo_imovel"]
-          titulo?: string
-          updated_at?: string
-          vagas?: number | null
-        }
-        Relationships: []
-      }
-      imovel_views: {
-        Row: {
-          created_at: string
-          id: string
-          imovel_id: string
-          viewer_hash: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          imovel_id: string
-          viewer_hash: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          imovel_id?: string
-          viewer_hash?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "imovel_views_imovel_id_fkey"
-            columns: ["imovel_id"]
-            isOneToOne: false
-            referencedRelation: "imoveis"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      login_attempts: {
-        Row: {
-          attempt_count: number | null
-          blocked_until: string | null
-          created_at: string | null
-          email: string | null
-          first_attempt_at: string | null
-          id: string
-          ip_address: string
-        }
-        Insert: {
-          attempt_count?: number | null
-          blocked_until?: string | null
-          created_at?: string | null
-          email?: string | null
-          first_attempt_at?: string | null
-          id?: string
-          ip_address: string
-        }
-        Update: {
-          attempt_count?: number | null
-          blocked_until?: string | null
-          created_at?: string | null
-          email?: string | null
-          first_attempt_at?: string | null
-          id?: string
-          ip_address?: string
-        }
-        Relationships: []
-      }
-      profiles: {
-        Row: {
-          created_at: string | null
-          email: string | null
-          full_name: string | null
-          id: string
-          must_change_password: boolean | null
-          updated_at: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          email?: string | null
-          full_name?: string | null
-          id: string
-          must_change_password?: boolean | null
-          updated_at?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          email?: string | null
-          full_name?: string | null
-          id?: string
-          must_change_password?: boolean | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
-      user_roles: {
-        Row: {
-          id: string
-          role: Database["public"]["Enums"]["app_role"]
-          user_id: string
-        }
-        Insert: {
-          id?: string
-          role: Database["public"]["Enums"]["app_role"]
-          user_id: string
-        }
-        Update: {
-          id?: string
-          role?: Database["public"]["Enums"]["app_role"]
-          user_id?: string
+          "Bairro desejado"?: string | null
+          "Data da visita"?: string | null
+          Finalidade?: string | null
+          "Follow UP 1"?: string | null
+          "Follow UP 2"?: string | null
+          "Follow UP 3"?: string | null
+          id_agendamento?: string | null
+          "IDConta ChatWoot"?: string | null
+          "IDConversa ChatWoot"?: string | null
+          identificador_lead?: string
+          "IDLead ChatWoot"?: string | null
+          "InboxID ChatWoot"?: string | null
+          "Inicio do atendimento"?: string | null
+          "Marcou no Grupo"?: string | null
+          Nome?: string | null
+          "Resumo da conversa"?: string | null
+          "Timestamp ultima msg"?: string | null
+          "Tipo de imovel"?: string | null
+          Whatsapp?: string | null
         }
         Relationships: []
       }
@@ -395,25 +85,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      has_any_role: { Args: { _user_id: string }; Returns: boolean }
-      has_role: {
-        Args: {
-          _role: Database["public"]["Enums"]["app_role"]
-          _user_id: string
-        }
-        Returns: boolean
-      }
+      [_ in never]: never
     }
     Enums: {
-      app_role: "admin" | "editor" | "viewer"
-      finalidade_imovel: "venda" | "aluguel"
-      tipo_imovel:
-        | "apartamento"
-        | "casa"
-        | "chacara"
-        | "sitio"
-        | "terreno"
-        | "comercial"
+      [_ in never]: never
     }
     CompositeTypes: {
       [_ in never]: never
@@ -540,17 +215,6 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {
-      app_role: ["admin", "editor", "viewer"],
-      finalidade_imovel: ["venda", "aluguel"],
-      tipo_imovel: [
-        "apartamento",
-        "casa",
-        "chacara",
-        "sitio",
-        "terreno",
-        "comercial",
-      ],
-    },
+    Enums: {},
   },
 } as const
