@@ -87,7 +87,7 @@ export function useCreateImovel() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (imovel: Partial<Imovel>) => {
-      const { error } = await supabase.from('imoveis').insert(imovel as any);
+      const { error } = await (supabase.from as any)('imoveis').insert(imovel as any);
       if (error) throw error;
     },
     onSuccess: () => {
