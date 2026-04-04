@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
-import { Settings, Building2, ExternalLink, KeyRound, Brain, ScrollText, BookOpen, Users, Activity, LogOut } from 'lucide-react';
+import { Settings, Building2, ExternalLink, KeyRound, Brain, ScrollText, BookOpen, Users, Activity, LogOut, MessageSquare } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { useAuth, AppRole } from '@/contexts/AuthContext';
