@@ -19,6 +19,7 @@ import Login from "./pages/Login";
 import RecoverPassword from "./pages/RecoverPassword";
 import ResetPassword from "./pages/ResetPassword";
 import ChangePassword from "./pages/ChangePassword";
+import SupabaseConfig from "./pages/SupabaseConfig";
 
 import SiteConfig from "./pages/admin/SiteConfig";
 import Properties from "./pages/admin/Properties";
