@@ -1,0 +1,1 @@
+ALTER TABLE public.imoveis ADD COLUMN mapa_url text DEFAULT NULL;
