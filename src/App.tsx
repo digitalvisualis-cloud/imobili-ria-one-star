@@ -55,6 +55,7 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/recuperar-senha" element={<RecoverPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/conectar-supabase" element={<SupabaseConfig />} />
             <Route path="/trocar-senha" element={<ChangePassword />} />
 
             {/* Admin routes - protected */}
