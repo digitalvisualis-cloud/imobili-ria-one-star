@@ -6,8 +6,7 @@ export function usePublicImoveis(filters?: PropertyFilters) {
   return useQuery({
     queryKey: ['imoveis', 'public', filters],
     queryFn: async (): Promise<Imovel[]> => {
-      let query = supabase
-        .from('imoveis')
+      let query = (supabase.from as any)('imoveis')
         .select('*')
         .eq('publicado', true)
         .order('destaque', { ascending: false })
