@@ -27,7 +27,7 @@ export default function ApiKeys() {
   const { data: keys = [], isLoading } = useQuery({
     queryKey: ['api-keys'],
     queryFn: async () => {
-      const { data } = await supabase.from('api_keys').select('*').order('created_at', { ascending: false });
+      const { data } = await (supabase.from as any)('api_keys').select('*').order('created_at', { ascending: false });
       return data || [];
     },
   });
@@ -37,7 +37,7 @@ export default function ApiKeys() {
       const rawKey = crypto.randomUUID() + '-' + crypto.randomUUID();
       const keyHash = await hashKey(rawKey);
       const keyPreview = rawKey.slice(-8);
-      await supabase.from('api_keys').insert({ name, key_hash: keyHash, key_preview: keyPreview });
+      await (supabase.from as any)('api_keys').insert({ name, key_hash: keyHash, key_preview: keyPreview });
       return rawKey;
     },
     onSuccess: (rawKey) => {
@@ -49,7 +49,7 @@ export default function ApiKeys() {
 
   const revokeMutation = useMutation({
     mutationFn: async (id: string) => {
-      await supabase.from('api_keys').update({ active: false }).eq('id', id);
+      await (supabase.from as any)('api_keys').update({ active: false }).eq('id', id);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['api-keys'] });

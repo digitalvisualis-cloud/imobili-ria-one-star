@@ -25,8 +25,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const fetchUserMeta = async (userId: string) => {
     // Fetch role
-    const { data: roleData } = await supabase
-      .from('user_roles')
+    const { data: roleData } = await (supabase.from as any)('user_roles')
       .select('role')
       .eq('user_id', userId)
       .limit(1)
@@ -35,8 +34,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setRole((roleData?.role as AppRole) || null);
 
     // Fetch profile for must_change_password
-    const { data: profile } = await supabase
-      .from('profiles')
+    const { data: profile } = await (supabase.from as any)('profiles')
       .select('must_change_password')
       .eq('id', userId)
       .single();

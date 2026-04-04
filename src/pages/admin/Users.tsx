@@ -28,13 +28,11 @@ export default function UsersPage() {
   const { data: users = [], isLoading } = useQuery({
     queryKey: ['admin-users'],
     queryFn: async () => {
-      const { data: profiles } = await supabase
-        .from('profiles')
+      const { data: profiles } = await (supabase.from as any)('profiles')
         .select('id, email, full_name, must_change_password, created_at')
         .order('created_at', { ascending: true });
 
-      const { data: roles } = await supabase
-        .from('user_roles')
+      const { data: roles } = await (supabase.from as any)('user_roles')
         .select('user_id, role');
 
       return (profiles || []).map(p => ({

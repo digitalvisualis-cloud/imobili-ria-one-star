@@ -37,7 +37,7 @@ export default function AiConfig() {
   const { data: config, isLoading } = useQuery({
     queryKey: ['ai-config'],
     queryFn: async () => {
-      const { data } = await supabase.from('ai_config').select('*').limit(1).single();
+      const { data } = await (supabase.from as any)('ai_config').select('*').limit(1).single();
       return data;
     },
   });
@@ -55,7 +55,7 @@ export default function AiConfig() {
   const saveMutation = useMutation({
     mutationFn: async () => {
       if (config?.id) {
-        await supabase.from('ai_config').update({
+        await (supabase.from as any)('ai_config').update({
           provider,
           model,
           api_key_encrypted: apiKey || null,

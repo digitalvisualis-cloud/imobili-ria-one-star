@@ -6,8 +6,7 @@ export function usePublicImoveis(filters?: PropertyFilters) {
   return useQuery({
     queryKey: ['imoveis', 'public', filters],
     queryFn: async (): Promise<Imovel[]> => {
-      let query = supabase
-        .from('imoveis')
+      let query = (supabase.from as any)('imoveis')
         .select('*')
         .eq('publicado', true)
         .order('destaque', { ascending: false })
@@ -33,8 +32,7 @@ export function useAllImoveis(search?: string, filterPublicado?: boolean | null,
   return useQuery({
     queryKey: ['imoveis', 'admin', search, filterPublicado, filterDestaque, filterTipo, filterFinalidade],
     queryFn: async (): Promise<Imovel[]> => {
-      let query = supabase
-        .from('imoveis')
+      let query = (supabase.from as any)('imoveis')
         .select('*')
         .order('destaque', { ascending: false })
         .order('updated_at', { ascending: false });
@@ -58,8 +56,7 @@ export function useImovel(id: string) {
   return useQuery({
     queryKey: ['imovel', id],
     queryFn: async (): Promise<Imovel | null> => {
-      const { data, error } = await supabase
-        .from('imoveis')
+      const { data, error } = await (supabase.from as any)('imoveis')
         .select('*')
         .eq('id', id)
         .single();
@@ -74,8 +71,7 @@ export function useImovelByCodigo(codigo: string) {
   return useQuery({
     queryKey: ['imovel', 'codigo', codigo],
     queryFn: async (): Promise<Imovel | null> => {
-      const { data, error } = await supabase
-        .from('imoveis')
+      const { data, error } = await (supabase.from as any)('imoveis')
         .select('*')
         .eq('codigo_imovel', codigo)
         .eq('publicado', true)
@@ -91,7 +87,7 @@ export function useCreateImovel() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (imovel: Partial<Imovel>) => {
-      const { error } = await supabase.from('imoveis').insert(imovel as any);
+      const { error } = await (supabase.from as any)('imoveis').insert(imovel as any);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -104,7 +100,7 @@ export function useUpdateImovel() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, ...updates }: Partial<Imovel> & { id: string }) => {
-      const { error } = await supabase.from('imoveis').update(updates as any).eq('id', id);
+      const { error } = await (supabase.from as any)('imoveis').update(updates as any).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -118,7 +114,7 @@ export function useDeleteImovel() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('imoveis').delete().eq('id', id);
+      const { error } = await (supabase.from as any)('imoveis').delete().eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
