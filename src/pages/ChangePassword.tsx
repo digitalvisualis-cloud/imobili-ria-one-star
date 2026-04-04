@@ -39,7 +39,7 @@ export default function ChangePassword() {
 
     // Mark password as changed
     if (user) {
-      await supabase.from('profiles').update({ must_change_password: false }).eq('id', user.id);
+      await (supabase.from as any)('profiles').update({ must_change_password: false }).eq('id', user.id);
     }
 
     setLoading(false);

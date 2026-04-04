@@ -114,7 +114,7 @@ export function useDeleteImovel() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('imoveis').delete().eq('id', id);
+      const { error } = await (supabase.from as any)('imoveis').delete().eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {

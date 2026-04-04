@@ -20,14 +20,12 @@ export function useUpdateSiteConfig() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (updates: Partial<ConfigSite>) => {
-      const { data: existing } = await supabase
-        .from('config_site')
+      const { data: existing } = await (supabase.from as any)('config_site')
         .select('id')
         .limit(1)
         .single();
       if (!existing) throw new Error('Config not found');
-      const { error } = await supabase
-        .from('config_site')
+      const { error } = await (supabase.from as any)('config_site')
         .update(updates as any)
         .eq('id', existing.id);
       if (error) throw error;

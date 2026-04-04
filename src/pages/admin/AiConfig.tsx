@@ -55,7 +55,7 @@ export default function AiConfig() {
   const saveMutation = useMutation({
     mutationFn: async () => {
       if (config?.id) {
-        await supabase.from('ai_config').update({
+        await (supabase.from as any)('ai_config').update({
           provider,
           model,
           api_key_encrypted: apiKey || null,
