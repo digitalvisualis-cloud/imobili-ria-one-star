@@ -56,8 +56,7 @@ export function useImovel(id: string) {
   return useQuery({
     queryKey: ['imovel', id],
     queryFn: async (): Promise<Imovel | null> => {
-      const { data, error } = await supabase
-        .from('imoveis')
+      const { data, error } = await (supabase.from as any)('imoveis')
         .select('*')
         .eq('id', id)
         .single();
