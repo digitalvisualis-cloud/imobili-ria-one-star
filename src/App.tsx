@@ -29,6 +29,7 @@ import AiLogs from "./pages/admin/AiLogs";
 import ApiDocs from "./pages/admin/ApiDocs";
 import ApiLogs from "./pages/admin/ApiLogs";
 import Users from "./pages/admin/Users";
+import Leads from "./pages/admin/Leads";
 
 const queryClient = new QueryClient();
 
