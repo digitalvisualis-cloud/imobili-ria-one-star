@@ -16,13 +16,39 @@ export default function ResetPassword() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    // Check for recovery event
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-      if (event === 'PASSWORD_RECOVERY') {
+    // Check if there's a recovery token in the URL hash
+    const hash = window.location.hash;
+    if (hash && (hash.includes('type=recovery') || hash.includes('type=signup'))) {
+      // Let Supabase client handle the hash automatically
+      // It will fire PASSWORD_RECOVERY event
+    }
+
+    // Check if we already have a session (user clicked recovery link)
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
         setReady(true);
       }
     });
-    return () => subscription.unsubscribe();
+
+    // Listen for recovery event
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'PASSWORD_RECOVERY' || (event === 'SIGNED_IN' && session)) {
+        setReady(true);
+      }
+    });
+
+    // Fallback: if after 3 seconds still not ready but we have a session, show form
+    const timeout = setTimeout(async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        setReady(true);
+      }
+    }, 3000);
+
+    return () => {
+      subscription.unsubscribe();
+      clearTimeout(timeout);
+    };
   }, []);
 
   const validate = () => {
@@ -53,8 +79,14 @@ export default function ResetPassword() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background px-4">
         <Card className="w-full max-w-md">
-          <CardContent className="py-8 text-center text-muted-foreground">
-            Verificando link de recuperação...
+          <CardContent className="py-8 text-center space-y-4">
+            <p className="text-muted-foreground">Verificando link de recuperação...</p>
+            <p className="text-xs text-muted-foreground">
+              Se esta tela persistir, o link pode ter expirado.{' '}
+              <a href="/recuperar-senha" className="text-primary hover:underline">
+                Solicitar novo link
+              </a>
+            </p>
           </CardContent>
         </Card>
       </div>
