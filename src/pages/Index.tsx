@@ -121,6 +121,19 @@ export default function HomePage() {
         <PropertyFilters onSearch={handleSearch} onAiSearch={handleAiSearch} isSearching={isSearching} />
       </section>
 
+      {aiMeta?.filtros_extraidos && Object.keys(aiMeta.filtros_extraidos).length > 0 && (
+        <section className="container mx-auto px-4 pt-6">
+          <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+            <span className="font-medium text-foreground">Filtros interpretados pela IA:</span>
+            {Object.entries(aiMeta.filtros_extraidos).map(([key, value]) => (
+              <Badge key={key} variant="secondary" className="capitalize">
+                {key.replace(/_/g, ' ')}: {String(value)}
+              </Badge>
+            ))}
+          </div>
+        </section>
+      )}
+
       <section className="container mx-auto px-4 py-12">
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
