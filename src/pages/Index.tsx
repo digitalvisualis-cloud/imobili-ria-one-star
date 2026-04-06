@@ -18,9 +18,21 @@ export default function HomePage() {
   const handleSearch = useCallback(async (filters: Filters) => {
     setIsSearching(true);
     try {
-      const { data, error } = await supabase.functions.invoke('public-search', {
-        body: { filters },
-      });
+      let query = (supabase.from as any)('imoveis')
+        .select('*')
+        .eq('publicado', true)
+        .order('destaque', { ascending: false })
+        .order('updated_at', { ascending: false });
+
+      if (filters.tipo) query = query.eq('tipo', filters.tipo);
+      if (filters.finalidade) query = query.eq('finalidade', filters.finalidade);
+      if (filters.cidade) query = query.ilike('cidade', `%${filters.cidade}%`);
+      if (filters.bairro) query = query.ilike('bairro', `%${filters.bairro}%`);
+      if (filters.preco_min) query = query.gte('preco', filters.preco_min);
+      if (filters.preco_max) query = query.lte('preco', filters.preco_max);
+      if (filters.quartos) query = query.gte('quartos', filters.quartos);
+
+      const { data, error } = await query;
 
       if (error) {
         toast.error('Erro ao buscar imóveis');
@@ -28,7 +40,7 @@ export default function HomePage() {
         return;
       }
 
-      setSearchResults((data?.items || []) as Imovel[]);
+      setSearchResults((data || []) as Imovel[]);
     } catch (e) {
       toast.error('Erro ao buscar imóveis');
       console.error('Search error:', e);
