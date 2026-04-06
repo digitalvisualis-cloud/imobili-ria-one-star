@@ -1,24 +1,44 @@
 
 
-# Configurar Supabase Externo
+## Plano de Correção de Segurança
 
-O usuario forneceu a **anon public key** do Supabase. Junto com a URL ja identificada anteriormente, temos tudo para conectar o projeto.
+### Problemas encontrados
 
-## Credenciais
+| # | Severidade | Problema |
+|---|-----------|----------|
+| 1 | **ERRO** | `user_roles` sem políticas de INSERT/UPDATE/DELETE — qualquer usuário autenticado pode se auto-promover a admin |
+| 2 | **ERRO** | `login_attempts` sem proteção de escrita — usuários podem manipular registros |
+| 3 | **AVISO** | `api_request_logs` sem proteção de escrita |
+| 4 | **AVISO** | `ai_search_logs` sem proteção de escrita |
+| 5 | **AVISO** | Leaked Password Protection desativado (ação manual no dashboard) |
 
-- **URL**: `https://mlyeqkkcqfsivqhuoedm.supabase.co`
-- **Anon Key**: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1seWVxa2tjcWZzaXZxaHVvZWRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2MjIyMjUsImV4cCI6MjA5MDE5ODIyNX0.GhtGdzlDeDC93RT3RP_78elndxule7Hz0XV0J_HiH20`
+### Correção via Migration SQL
 
-## Alteracao
+Uma única migration para resolver os itens 1-4. A estratégia é **negar todas as operações de escrita** nessas tabelas para usuários normais, já que as inserções são feitas via Edge Functions com service role:
 
-Atualizar `src/integrations/supabase/client.ts` para usar as credenciais diretamente (sao chaves publicas, seguras para o codigo):
+```sql
+-- 1. user_roles: apenas admin pode inserir/atualizar/deletar
+CREATE POLICY "Admin insert user_roles" ON public.user_roles
+  FOR INSERT TO authenticated
+  WITH CHECK (has_role(auth.uid(), 'admin'::app_role));
 
-```typescript
-const SUPABASE_URL = "https://mlyeqkkcqfsivqhuoedm.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
+CREATE POLICY "Admin update user_roles" ON public.user_roles
+  FOR UPDATE TO authenticated
+  USING (has_role(auth.uid(), 'admin'::app_role));
+
+CREATE POLICY "Admin delete user_roles" ON public.user_roles
+  FOR DELETE TO authenticated
+  USING (has_role(auth.uid(), 'admin'::app_role));
+
+-- 2-4. Tabelas de logs: nenhuma escrita via client (service role cuida disso)
+-- login_attempts, api_request_logs, ai_search_logs já não têm políticas de INSERT
+-- O scan alerta porque a ausência de política = deny por padrão, mas o scanner
+-- interpreta como risco. Vamos adicionar políticas explícitas de deny/admin-only.
 ```
 
-## Proximo passo apos implementacao
+### Item 5 — Ação Manual
+Ativar **Leaked Password Protection** no dashboard do Supabase em **Auth > Providers**.
 
-O usuario precisara executar as **5 migrations SQL** no SQL Editor do Supabase para criar as tabelas, buckets e policies necessarias.
+### Resultado esperado
+Após a migration, o scan deve retornar apenas o aviso de Leaked Password Protection (que requer ação manual).
 
