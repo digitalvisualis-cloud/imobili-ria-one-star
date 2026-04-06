@@ -1,0 +1,1 @@
+UPDATE config_site SET whatsapp = '5511964980107' WHERE id = '294a8381-4a1c-423f-a61c-ea3740ea5b77';
