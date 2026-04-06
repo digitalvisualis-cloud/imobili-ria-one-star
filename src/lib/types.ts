@@ -19,6 +19,7 @@ export interface Imovel {
   imagens: string[];
   capa_url: string | null;
   mapa_url: string | null;
+  video_url: string | null;
   destaque: boolean;
   publicado: boolean;
   created_at: string;
