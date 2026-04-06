@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
-import { ArrowLeft, Save } from 'lucide-react';
+import { ArrowLeft, Save, Video } from 'lucide-react';
 
 export default function PropertyFormPage() {
   const { id } = useParams<{ id: string }>();
@@ -37,6 +37,7 @@ export default function PropertyFormPage() {
     estado: 'SP',
     capa_url: '',
     mapa_url: '',
+    video_url: '',
     imagens: [] as string[],
     destaque: false,
     publicado: true,
@@ -62,6 +63,7 @@ export default function PropertyFormPage() {
         estado: existing.estado || 'SP',
         capa_url: existing.capa_url || '',
         mapa_url: (existing as any).mapa_url || '',
+        video_url: (existing as any).video_url || '',
         imagens: existing.imagens || [],
         destaque: existing.destaque,
         publicado: existing.publicado,
@@ -238,6 +240,13 @@ export default function PropertyFormPage() {
             <Input value={form.mapa_url} onChange={e => setForm(p => ({ ...p, mapa_url: e.target.value }))} placeholder="https://www.google.com/maps/embed?pb=..." />
             <p className="text-xs text-muted-foreground mt-1">
               Cole a URL de incorporação do Google Maps. No Google Maps, clique em "Compartilhar" → "Incorporar um mapa" e copie apenas a URL do src.
+            </p>
+          </div>
+          <div>
+            <Label className="flex items-center gap-2"><Video className="h-4 w-4" /> URL do Vídeo (YouTube ou MP4)</Label>
+            <Input value={form.video_url} onChange={e => setForm(p => ({ ...p, video_url: e.target.value }))} placeholder="https://www.youtube.com/watch?v=... ou https://...video.mp4" />
+            <p className="text-xs text-muted-foreground mt-1">
+              Cole a URL de um vídeo do YouTube ou um link direto para um arquivo MP4.
             </p>
           </div>
           <div>
