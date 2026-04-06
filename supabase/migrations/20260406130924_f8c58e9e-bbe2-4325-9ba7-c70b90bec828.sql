@@ -1,0 +1,1 @@
+DROP POLICY IF EXISTS "login_attempts_insert" ON public.login_attempts;
