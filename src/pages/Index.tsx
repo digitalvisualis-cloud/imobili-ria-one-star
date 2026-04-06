@@ -8,15 +8,18 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { motion } from 'framer-motion';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { Badge } from '@/components/ui/badge';
 
 export default function HomePage() {
   const { data: initialImoveis, isLoading: isInitialLoading } = usePublicImoveis();
   const { data: config } = useSiteConfig();
   const [searchResults, setSearchResults] = useState<Imovel[] | null>(null);
   const [isSearching, setIsSearching] = useState(false);
+  const [aiMeta, setAiMeta] = useState<{ filtros_extraidos?: any; observacoes?: string } | null>(null);
 
   const handleSearch = useCallback(async (filters: Filters) => {
     setIsSearching(true);
+    setAiMeta(null);
     try {
       let query = (supabase.from as any)('imoveis')
         .select('*')
@@ -44,6 +47,43 @@ export default function HomePage() {
     } catch (e) {
       toast.error('Erro ao buscar imóveis');
       console.error('Search error:', e);
+    } finally {
+      setIsSearching(false);
+    }
+  }, []);
+
+  const handleAiSearch = useCallback(async (query: string) => {
+    setIsSearching(true);
+    setAiMeta(null);
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/public-search`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          },
+          body: JSON.stringify({ query }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        toast.error(data.error || 'Erro na busca com IA');
+        return;
+      }
+
+      setSearchResults((data.items || []) as Imovel[]);
+      setAiMeta(data.meta || null);
+
+      if (data.meta?.observacoes) {
+        toast.info(data.meta.observacoes);
+      }
+    } catch (e) {
+      toast.error('Erro ao conectar com a busca IA');
+      console.error('AI search error:', e);
     } finally {
       setIsSearching(false);
     }
@@ -78,7 +118,7 @@ export default function HomePage() {
 
       {/* Filters + Listings */}
       <section className="container mx-auto px-4 -mt-8 relative z-10">
-        <PropertyFilters onSearch={handleSearch} isSearching={isSearching} />
+        <PropertyFilters onSearch={handleSearch} onAiSearch={handleAiSearch} isSearching={isSearching} />
       </section>
 
       <section className="container mx-auto px-4 py-12">
