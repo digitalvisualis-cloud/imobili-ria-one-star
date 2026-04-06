@@ -303,6 +303,7 @@ export type Database = {
           titulo: string
           updated_at: string
           vagas: number | null
+          video_url: string | null
         }
         Insert: {
           area_m2?: number | null
@@ -326,6 +327,7 @@ export type Database = {
           titulo: string
           updated_at?: string
           vagas?: number | null
+          video_url?: string | null
         }
         Update: {
           area_m2?: number | null
@@ -349,6 +351,7 @@ export type Database = {
           titulo?: string
           updated_at?: string
           vagas?: number | null
+          video_url?: string | null
         }
         Relationships: []
       }
