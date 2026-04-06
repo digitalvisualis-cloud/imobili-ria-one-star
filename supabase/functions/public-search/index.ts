@@ -85,7 +85,8 @@ serve(async (req) => {
         content: `Você é um assistente que extrai filtros de busca de imóveis a partir de texto livre em português.
 Tipos válidos: apartamento, casa, chacara, sitio, terreno, comercial.
 Finalidades válidas: venda, aluguel.
-Extraia apenas filtros que o usuário mencionou explicitamente. Não invente filtros.`,
+Extraia apenas filtros que o usuário mencionou explicitamente. Não invente filtros.
+IMPORTANTE: Para nomes de cidades e bairros, SEMPRE use a grafia correta com acentos e maiúsculas. Exemplos: "São Paulo" (não "sao paulo"), "Ibiúna" (não "ibiuna"), "Tatuapé" (não "tatuape").`,
       },
       { role: "user", content: sanitize(query) },
     ];
