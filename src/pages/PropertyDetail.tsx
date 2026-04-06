@@ -5,11 +5,18 @@ import { formatCurrency, TIPO_LABELS, FINALIDADE_LABELS, buildWhatsAppLink } fro
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { BedDouble, Car, Maximize, Bath, MapPin, MessageCircle, Copy, ChevronLeft, Eye } from 'lucide-react';
+import { BedDouble, Car, Maximize, Bath, MapPin, MessageCircle, Copy, ChevronLeft, Eye, Video } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+
+function getYouTubeEmbedUrl(url: string): string {
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match = url.match(regExp);
+  const videoId = match && match[2].length === 11 ? match[2] : null;
+  return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+}
 
 export default function PropertyDetail() {
   const { codigo } = useParams<{ codigo: string }>();
@@ -193,6 +200,36 @@ export default function PropertyDetail() {
           )}
         </div>
       </div>
+
+      {/* Video */}
+      {(imovel as any).video_url && (
+        <div className="mt-8">
+          <h2 className="font-display text-2xl font-semibold mb-4 flex items-center gap-2">
+            <Video className="h-5 w-5 text-primary" /> Vídeo do Imóvel
+          </h2>
+          <div className="aspect-video rounded-lg overflow-hidden border border-border bg-muted">
+            {(imovel as any).video_url.includes('youtube.com') || (imovel as any).video_url.includes('youtu.be') ? (
+              <iframe
+                src={getYouTubeEmbedUrl((imovel as any).video_url)}
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                title="Vídeo do imóvel"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              />
+            ) : (
+              <video
+                src={(imovel as any).video_url}
+                controls
+                className="w-full h-full object-contain"
+                preload="metadata"
+              />
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Map */}
       {imovel.mapa_url && (

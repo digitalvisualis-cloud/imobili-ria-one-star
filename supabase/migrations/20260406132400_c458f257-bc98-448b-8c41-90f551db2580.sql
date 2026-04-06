@@ -1,0 +1,1 @@
+ALTER TABLE public.imoveis ADD COLUMN video_url text DEFAULT NULL;
