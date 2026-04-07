@@ -47,7 +47,8 @@ export default function Login() {
       setAttempts(prev => prev + 1);
       setError(signInError);
     } else {
-      navigate('/admin', { replace: true });
+      // Role will be fetched by AuthContext; redirect handled by the if(user) check on re-render
+      navigate('/painel', { replace: true });
     }
   };
 
