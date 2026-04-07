@@ -17,8 +17,11 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [attempts, setAttempts] = useState(0);
 
+  const { role } = useAuth();
+
   if (user) {
-    navigate('/admin', { replace: true });
+    const dest = role && ['owner', 'manager', 'agent'].includes(role) ? '/painel' : '/admin';
+    navigate(dest, { replace: true });
     return null;
   }
 
