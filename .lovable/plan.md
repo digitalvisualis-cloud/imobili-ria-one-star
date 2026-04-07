@@ -1,44 +1,81 @@
 
 
-## Plano de Correção de Segurança
+# Portal do Cliente (Imobiliária) - Plano Revisado
 
-### Problemas encontrados
+## Entendimento do Modelo
 
-| # | Severidade | Problema |
-|---|-----------|----------|
-| 1 | **ERRO** | `user_roles` sem políticas de INSERT/UPDATE/DELETE — qualquer usuário autenticado pode se auto-promover a admin |
-| 2 | **ERRO** | `login_attempts` sem proteção de escrita — usuários podem manipular registros |
-| 3 | **AVISO** | `api_request_logs` sem proteção de escrita |
-| 4 | **AVISO** | `ai_search_logs` sem proteção de escrita |
-| 5 | **AVISO** | Leaked Password Protection desativado (ação manual no dashboard) |
+- **Admin (`/admin`)** = Você, que vende e mantém a plataforma (infraestrutura, API, IA, logs)
+- **Cliente (`/painel`)** = O dono da imobiliária/corretor que compra o sistema
+- O cliente pode criar funcionários com permissões granulares dentro do portal dele
 
-### Correção via Migration SQL
+## Nova Estrutura de Roles
 
-Uma única migration para resolver os itens 1-4. A estratégia é **negar todas as operações de escrita** nessas tabelas para usuários normais, já que as inserções são feitas via Edge Functions com service role:
+O sistema atual tem `admin | editor | viewer`. Precisamos expandir:
 
-```sql
--- 1. user_roles: apenas admin pode inserir/atualizar/deletar
-CREATE POLICY "Admin insert user_roles" ON public.user_roles
-  FOR INSERT TO authenticated
-  WITH CHECK (has_role(auth.uid(), 'admin'::app_role));
+| Role | Acesso | Quem é |
+|------|--------|--------|
+| `admin` | `/admin` - tudo técnico + `/painel` | Você (dono da plataforma) |
+| `owner` | `/painel` - tudo (imóveis, CRM, financeiro, dashboard, gestão de equipe) | Dono da imobiliária |
+| `manager` | `/painel` - módulos atribuídos pelo owner (CRM, financeiro, etc.) | Gerente/funcionário de confiança |
+| `agent` | `/painel` - cadastro de imóveis (pode apagar os que ele criou), ver leads | Corretor/funcionário |
 
-CREATE POLICY "Admin update user_roles" ON public.user_roles
-  FOR UPDATE TO authenticated
-  USING (has_role(auth.uid(), 'admin'::app_role));
+## Banco de Dados - Novas Tabelas e Alterações
 
-CREATE POLICY "Admin delete user_roles" ON public.user_roles
-  FOR DELETE TO authenticated
-  USING (has_role(auth.uid(), 'admin'::app_role));
+### 1. Expandir o enum `app_role`
+Adicionar `owner`, `manager`, `agent` ao enum existente.
 
--- 2-4. Tabelas de logs: nenhuma escrita via client (service role cuida disso)
--- login_attempts, api_request_logs, ai_search_logs já não têm políticas de INSERT
--- O scan alerta porque a ausência de política = deny por padrão, mas o scanner
--- interpreta como risco. Vamos adicionar políticas explícitas de deny/admin-only.
-```
+### 2. Tabela `agent_permissions`
+Permite ao owner definir quais módulos cada funcionário acessa:
+- `user_id`, `module` (imoveis, crm, financeiro, dashboard), `can_read`, `can_write`, `can_delete`
 
-### Item 5 — Ação Manual
-Ativar **Leaked Password Protection** no dashboard do Supabase em **Auth > Providers**.
+### 3. Tabela `clientes` (CRM)
+Cadastro de clientes que fecharam ou estão em negociação:
+- nome, email, telefone, cpf_cnpj, observacoes, created_by, timestamps
 
-### Resultado esperado
-Após a migration, o scan deve retornar apenas o aviso de Leaked Password Protection (que requer ação manual).
+### 4. Tabela `negocios`
+Vincula cliente + imóvel + valores:
+- cliente_id, imovel_id, valor, comissao_percentual, comissao_valor, status (prospeccao, negociacao, fechado, cancelado), data_fechamento, created_by
+
+### 5. Tabela `financeiro`
+Fluxo de caixa:
+- negocio_id (opcional), tipo (receita/despesa), categoria, valor, data_vencimento, data_pagamento, status (pendente, pago, atrasado), descricao, created_by
+
+### 6. Adicionar `created_by` na tabela `imoveis`
+Para que o agente só possa apagar imóveis que ele mesmo cadastrou.
+
+### RLS
+- `imoveis`: agente pode deletar WHERE `created_by = auth.uid()`
+- Novas tabelas: owner vê tudo; manager/agent vêem conforme `agent_permissions`
+- Função `has_module_access(user_id, module, action)` para checar permissões granulares
+
+## Frontend - Arquitetura
+
+### Layout `/painel`
+- Sidebar própria com navegação: Dashboard, Imóveis, CRM, Financeiro, Equipe (só owner)
+- Rota protegida: roles `owner | manager | agent`
+- Componente `ClientLayout.tsx` separado do `AdminLayout.tsx`
+
+### Páginas do Portal
+
+1. **Dashboard** (`/painel`) - Imóveis mais acessados, cliques, leads recentes, resumo financeiro
+2. **Imóveis** (`/painel/imoveis`) - Listagem, cadastro, edição (reusa componentes existentes)
+3. **CRM** (`/painel/crm`) - Lista de clientes, cadastro, histórico de negócios
+4. **Financeiro** (`/painel/financeiro`) - Receitas, despesas, comissões, filtros por período
+5. **Equipe** (`/painel/equipe`) - Só owner: adicionar funcionários, atribuir permissões por módulo
+
+### Fluxo de Acesso
+- Login único: após autenticação, redireciona para `/admin` se admin, `/painel` se owner/manager/agent
+- Owner acessa tudo no `/painel` incluindo gestão de equipe
+- Manager/Agent vêem apenas módulos permitidos
+
+## Ordem de Implementação
+
+1. Migração do banco (enum, tabelas, RLS, `created_by` em imoveis)
+2. Função SQL `has_module_access` + atualizar `AuthContext` com novas roles
+3. Layout do portal (`ClientLayout`) + rotas protegidas
+4. Dashboard com analytics (usa `imovel_views` existente)
+5. Módulo de Imóveis no portal (adapta componentes existentes)
+6. Módulo CRM (clientes + negócios)
+7. Módulo Financeiro
+8. Gestão de Equipe (owner atribui permissões)
 
