@@ -11,7 +11,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
-import { ArrowLeft, Save, Video } from 'lucide-react';
+import { ArrowLeft, Save } from 'lucide-react';
+import ImageUpload from '@/components/admin/ImageUpload';
+import VideoUpload from '@/components/admin/VideoUpload';
 
 export default function PropertyFormPage() {
   const { id } = useParams<{ id: string }>();
@@ -42,8 +44,6 @@ export default function PropertyFormPage() {
     destaque: false,
     publicado: true,
   });
-
-  const [newImageUrl, setNewImageUrl] = useState('');
 
   useEffect(() => {
     if (existing) {
@@ -81,29 +81,24 @@ export default function PropertyFormPage() {
       return;
     }
 
+    // Use first image as cover if no cover set
+    const dataToSave = {
+      ...form,
+      capa_url: form.capa_url || form.imagens[0] || '',
+    };
+
     try {
       if (isEdit) {
-        await updateImovel.mutateAsync({ id, ...form } as any);
+        await updateImovel.mutateAsync({ id, ...dataToSave } as any);
         toast.success('Imóvel atualizado com sucesso!');
       } else {
-        await createImovel.mutateAsync(form as any);
+        await createImovel.mutateAsync(dataToSave as any);
         toast.success('Imóvel criado com sucesso!');
       }
       navigate('/admin/imoveis');
     } catch (err: any) {
       toast.error(err?.message || 'Erro ao salvar imóvel');
     }
-  };
-
-  const addImage = () => {
-    if (newImageUrl.trim()) {
-      setForm(p => ({ ...p, imagens: [...p.imagens, newImageUrl.trim()] }));
-      setNewImageUrl('');
-    }
-  };
-
-  const removeImage = (index: number) => {
-    setForm(p => ({ ...p, imagens: p.imagens.filter((_, i) => i !== index) }));
   };
 
   if (isEdit && isLoading) {
@@ -224,53 +219,39 @@ export default function PropertyFormPage() {
               <Input value={form.estado} onChange={e => setForm(p => ({ ...p, estado: e.target.value }))} />
             </div>
           </div>
-        </CardContent>
-      </Card>
-
-      {/* Media */}
-      <Card>
-        <CardHeader><CardTitle className="font-display">Mídia</CardTitle></CardHeader>
-        <CardContent className="space-y-4">
-          <div>
-            <Label>URL da foto de capa</Label>
-            <Input value={form.capa_url} onChange={e => setForm(p => ({ ...p, capa_url: e.target.value }))} placeholder="https://..." />
-          </div>
-          <div>
+          <div className="mt-4">
             <Label>URL do mapa (Google Maps Embed)</Label>
             <Input value={form.mapa_url} onChange={e => setForm(p => ({ ...p, mapa_url: e.target.value }))} placeholder="https://www.google.com/maps/embed?pb=..." />
             <p className="text-xs text-muted-foreground mt-1">
               Cole a URL de incorporação do Google Maps. No Google Maps, clique em "Compartilhar" → "Incorporar um mapa" e copie apenas a URL do src.
             </p>
           </div>
-          <div>
-            <Label className="flex items-center gap-2"><Video className="h-4 w-4" /> URL do Vídeo (YouTube ou MP4)</Label>
-            <Input value={form.video_url} onChange={e => setForm(p => ({ ...p, video_url: e.target.value }))} placeholder="https://www.youtube.com/watch?v=... ou https://...video.mp4" />
-            <p className="text-xs text-muted-foreground mt-1">
-              Cole a URL de um vídeo do YouTube ou um link direto para um arquivo MP4.
-            </p>
-          </div>
-          <div>
-            <Label>Imagens adicionais</Label>
-            <div className="flex gap-2">
-              <Input value={newImageUrl} onChange={e => setNewImageUrl(e.target.value)} placeholder="URL da imagem" className="flex-1" />
-              <Button type="button" variant="outline" onClick={addImage}>Adicionar</Button>
-            </div>
-            {form.imagens.length > 0 && (
-              <div className="flex flex-wrap gap-2 mt-3">
-                {form.imagens.map((img, i) => (
-                  <div key={i} className="relative w-20 h-16 rounded-md overflow-hidden group">
-                    <img src={img} alt="" className="w-full h-full object-cover" />
-                    <button
-                      onClick={() => removeImage(i)}
-                      className="absolute inset-0 bg-destructive/70 text-destructive-foreground opacity-0 group-hover:opacity-100 transition-opacity text-xs flex items-center justify-center"
-                    >
-                      Remover
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+        </CardContent>
+      </Card>
+
+      {/* Photos */}
+      <Card>
+        <CardHeader><CardTitle className="font-display">Fotos</CardTitle></CardHeader>
+        <CardContent>
+          <ImageUpload
+            images={form.imagens}
+            onImagesChange={imgs => setForm(p => ({ ...p, imagens: imgs, capa_url: imgs[0] || '' }))}
+            folder="fotos"
+          />
+          <p className="text-xs text-muted-foreground mt-2">
+            A primeira foto será usada como capa do imóvel.
+          </p>
+        </CardContent>
+      </Card>
+
+      {/* Video */}
+      <Card>
+        <CardHeader><CardTitle className="font-display">Vídeo</CardTitle></CardHeader>
+        <CardContent>
+          <VideoUpload
+            videoUrl={form.video_url}
+            onVideoChange={url => setForm(p => ({ ...p, video_url: url }))}
+          />
         </CardContent>
       </Card>
 
