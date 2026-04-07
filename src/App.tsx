@@ -8,6 +8,7 @@ import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 
 import { PublicLayout } from "@/components/public/PublicLayout";
 import { AdminLayout } from "@/components/admin/AdminLayout";
+import { ClientLayout } from "@/components/portal/ClientLayout";
 
 import Index from "./pages/Index";
 import PropertyDetail from "./pages/PropertyDetail";
@@ -31,6 +32,12 @@ import ApiDocs from "./pages/admin/ApiDocs";
 import ApiLogs from "./pages/admin/ApiLogs";
 import Users from "./pages/admin/Users";
 import Leads from "./pages/admin/Leads";
+
+import Dashboard from "./pages/portal/Dashboard";
+import PortalProperties from "./pages/portal/PortalProperties";
+import CRM from "./pages/portal/CRM";
+import Financeiro from "./pages/portal/Financeiro";
+import Equipe from "./pages/portal/Equipe";
 
 const queryClient = new QueryClient();
 
@@ -72,6 +79,17 @@ const App = () => (
                 <Route path="api-logs" element={<ApiLogs />} />
                 <Route path="usuarios" element={<Users />} />
                 <Route path="leads" element={<Leads />} />
+              </Route>
+            </Route>
+
+            {/* Portal routes - for owner/manager/agent */}
+            <Route element={<ProtectedRoute allowedRoles={['admin', 'owner', 'manager', 'agent']} />}>
+              <Route path="/painel" element={<ClientLayout />}>
+                <Route index element={<Dashboard />} />
+                <Route path="imoveis" element={<PortalProperties />} />
+                <Route path="crm" element={<CRM />} />
+                <Route path="financeiro" element={<Financeiro />} />
+                <Route path="equipe" element={<Equipe />} />
               </Route>
             </Route>
 

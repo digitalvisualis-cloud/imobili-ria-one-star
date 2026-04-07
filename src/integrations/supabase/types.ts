@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      agent_permissions: {
+        Row: {
+          can_delete: boolean
+          can_read: boolean
+          can_write: boolean
+          created_at: string
+          id: string
+          module: Database["public"]["Enums"]["portal_module"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          can_delete?: boolean
+          can_read?: boolean
+          can_write?: boolean
+          created_at?: string
+          id?: string
+          module: Database["public"]["Enums"]["portal_module"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          can_delete?: boolean
+          can_read?: boolean
+          can_write?: boolean
+          created_at?: string
+          id?: string
+          module?: Database["public"]["Enums"]["portal_module"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       ai_config: {
         Row: {
           api_key_encrypted: string | null
@@ -166,6 +199,42 @@ export type Database = {
           },
         ]
       }
+      clientes: {
+        Row: {
+          cpf_cnpj: string | null
+          created_at: string
+          created_by: string | null
+          email: string | null
+          id: string
+          nome: string
+          observacoes: string | null
+          telefone: string | null
+          updated_at: string
+        }
+        Insert: {
+          cpf_cnpj?: string | null
+          created_at?: string
+          created_by?: string | null
+          email?: string | null
+          id?: string
+          nome: string
+          observacoes?: string | null
+          telefone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          cpf_cnpj?: string | null
+          created_at?: string
+          created_by?: string | null
+          email?: string | null
+          id?: string
+          nome?: string
+          observacoes?: string | null
+          telefone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       config_site: {
         Row: {
           created_at: string
@@ -213,6 +282,59 @@ export type Database = {
           whatsapp?: string | null
         }
         Relationships: []
+      }
+      financeiro: {
+        Row: {
+          categoria: string
+          created_at: string
+          created_by: string | null
+          data_pagamento: string | null
+          data_vencimento: string | null
+          descricao: string | null
+          id: string
+          negocio_id: string | null
+          status: Database["public"]["Enums"]["financeiro_status"]
+          tipo: Database["public"]["Enums"]["financeiro_tipo"]
+          updated_at: string
+          valor: number
+        }
+        Insert: {
+          categoria?: string
+          created_at?: string
+          created_by?: string | null
+          data_pagamento?: string | null
+          data_vencimento?: string | null
+          descricao?: string | null
+          id?: string
+          negocio_id?: string | null
+          status?: Database["public"]["Enums"]["financeiro_status"]
+          tipo: Database["public"]["Enums"]["financeiro_tipo"]
+          updated_at?: string
+          valor?: number
+        }
+        Update: {
+          categoria?: string
+          created_at?: string
+          created_by?: string | null
+          data_pagamento?: string | null
+          data_vencimento?: string | null
+          descricao?: string | null
+          id?: string
+          negocio_id?: string | null
+          status?: Database["public"]["Enums"]["financeiro_status"]
+          tipo?: Database["public"]["Enums"]["financeiro_tipo"]
+          updated_at?: string
+          valor?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "financeiro_negocio_id_fkey"
+            columns: ["negocio_id"]
+            isOneToOne: false
+            referencedRelation: "negocios"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       IMOBILIARIA_ANDRE: {
         Row: {
@@ -435,6 +557,66 @@ export type Database = {
         }
         Relationships: []
       }
+      negocios: {
+        Row: {
+          cliente_id: string
+          comissao_percentual: number | null
+          comissao_valor: number | null
+          created_at: string
+          created_by: string | null
+          data_fechamento: string | null
+          id: string
+          imovel_id: string | null
+          observacoes: string | null
+          status: Database["public"]["Enums"]["negocio_status"]
+          updated_at: string
+          valor: number
+        }
+        Insert: {
+          cliente_id: string
+          comissao_percentual?: number | null
+          comissao_valor?: number | null
+          created_at?: string
+          created_by?: string | null
+          data_fechamento?: string | null
+          id?: string
+          imovel_id?: string | null
+          observacoes?: string | null
+          status?: Database["public"]["Enums"]["negocio_status"]
+          updated_at?: string
+          valor?: number
+        }
+        Update: {
+          cliente_id?: string
+          comissao_percentual?: number | null
+          comissao_valor?: number | null
+          created_at?: string
+          created_by?: string | null
+          data_fechamento?: string | null
+          id?: string
+          imovel_id?: string | null
+          observacoes?: string | null
+          status?: Database["public"]["Enums"]["negocio_status"]
+          updated_at?: string
+          valor?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "negocios_cliente_id_fkey"
+            columns: ["cliente_id"]
+            isOneToOne: false
+            referencedRelation: "clientes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "negocios_imovel_id_fkey"
+            columns: ["imovel_id"]
+            isOneToOne: false
+            referencedRelation: "imoveis"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string | null
@@ -486,6 +668,14 @@ export type Database = {
     }
     Functions: {
       has_any_role: { Args: { _user_id: string }; Returns: boolean }
+      has_module_access: {
+        Args: {
+          _action?: string
+          _module: Database["public"]["Enums"]["portal_module"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -493,6 +683,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_portal_user: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "editor" | "viewer" | "owner" | "manager" | "agent"
