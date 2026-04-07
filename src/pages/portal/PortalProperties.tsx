@@ -32,8 +32,8 @@ export default function PortalProperties() {
       }
       if (filterPublicado !== null) query = query.eq('publicado', filterPublicado);
       if (filterDestaque !== null) query = query.eq('destaque', filterDestaque);
-      if (filterTipo && filterTipo !== 'all') query = query.eq('tipo', filterTipo);
-      if (filterFinalidade && filterFinalidade !== 'all') query = query.eq('finalidade', filterFinalidade);
+      if (filterTipo && filterTipo !== 'all') query = query.eq('tipo', filterTipo as any);
+      if (filterFinalidade && filterFinalidade !== 'all') query = query.eq('finalidade', filterFinalidade as any);
       const { data, error } = await query;
       if (error) throw error;
       return data;
@@ -41,7 +41,7 @@ export default function PortalProperties() {
   });
 
   const updateMutation = useMutation({
-    mutationFn: async (params: { id: string; [key: string]: any }) => {
+    mutationFn: async (params: { id: string; publicado?: boolean; destaque?: boolean }) => {
       const { id, ...rest } = params;
       const { error } = await supabase.from('imoveis').update(rest).eq('id', id);
       if (error) throw error;
