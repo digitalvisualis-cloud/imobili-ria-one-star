@@ -289,6 +289,7 @@ export type Database = {
           cidade: string | null
           codigo_imovel: string
           created_at: string
+          created_by: string | null
           descricao: string | null
           destaque: boolean | null
           estado: string | null
@@ -313,6 +314,7 @@ export type Database = {
           cidade?: string | null
           codigo_imovel: string
           created_at?: string
+          created_by?: string | null
           descricao?: string | null
           destaque?: boolean | null
           estado?: string | null
@@ -337,6 +339,7 @@ export type Database = {
           cidade?: string | null
           codigo_imovel?: string
           created_at?: string
+          created_by?: string | null
           descricao?: string | null
           destaque?: boolean | null
           estado?: string | null
@@ -492,8 +495,12 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "editor" | "viewer"
+      app_role: "admin" | "editor" | "viewer" | "owner" | "manager" | "agent"
       finalidade_imovel: "venda" | "aluguel"
+      financeiro_status: "pendente" | "pago" | "atrasado"
+      financeiro_tipo: "receita" | "despesa"
+      negocio_status: "prospeccao" | "negociacao" | "fechado" | "cancelado"
+      portal_module: "imoveis" | "crm" | "financeiro" | "dashboard"
       tipo_imovel:
         | "apartamento"
         | "casa"
@@ -628,8 +635,12 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "editor", "viewer"],
+      app_role: ["admin", "editor", "viewer", "owner", "manager", "agent"],
       finalidade_imovel: ["venda", "aluguel"],
+      financeiro_status: ["pendente", "pago", "atrasado"],
+      financeiro_tipo: ["receita", "despesa"],
+      negocio_status: ["prospeccao", "negociacao", "fechado", "cancelado"],
+      portal_module: ["imoveis", "crm", "financeiro", "dashboard"],
       tipo_imovel: [
         "apartamento",
         "casa",
