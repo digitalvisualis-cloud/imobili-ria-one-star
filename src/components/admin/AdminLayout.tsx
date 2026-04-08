@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
-import { Settings, Building2, ExternalLink, KeyRound, Brain, ScrollText, BookOpen, Users, Activity, LogOut, MessageSquare } from 'lucide-react';
+import { Settings, Building2, ExternalLink, KeyRound, Brain, ScrollText, BookOpen, Users, Activity, LogOut, MessageSquare, BarChart3 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { useAuth, AppRole } from '@/contexts/AuthContext';
@@ -16,6 +16,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { to: '/admin', label: 'Configurações do Site', icon: Settings, roles: ['admin', 'editor', 'viewer'] },
+  { to: '/admin/analytics', label: 'Analytics', icon: BarChart3, roles: ['admin', 'editor', 'viewer'] },
   { to: '/admin/imoveis', label: 'Imóveis', icon: Building2, roles: ['admin', 'editor', 'viewer'] },
   { to: '/admin/api-keys', label: 'Chaves de API', icon: KeyRound, roles: ['admin', 'editor'] },
   { to: '/admin/ia-config', label: 'Configurações de IA', icon: Brain, roles: ['admin'] },
