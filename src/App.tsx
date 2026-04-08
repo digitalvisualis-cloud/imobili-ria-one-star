@@ -37,8 +37,10 @@ import AdminAnalytics from "./pages/admin/Analytics";
 import Dashboard from "./pages/portal/Dashboard";
 import PortalProperties from "./pages/portal/PortalProperties";
 import CRM from "./pages/portal/CRM";
+import Agenda from "./pages/portal/Agenda";
 import Financeiro from "./pages/portal/Financeiro";
 import Equipe from "./pages/portal/Equipe";
+import Integracoes from "./pages/admin/Integracoes";
 
 const queryClient = new QueryClient();
 
@@ -69,7 +71,8 @@ const App = () => (
             {/* Admin routes - protected */}
             <Route element={<ProtectedRoute allowedRoles={['admin', 'editor', 'viewer']} />}>
               <Route path="/admin" element={<AdminLayout />}>
-                <Route index element={<SiteConfig />} />
+              <Route index element={<SiteConfig />} />
+                <Route path="integracoes" element={<Integracoes />} />
                 <Route path="analytics" element={<AdminAnalytics />} />
                 <Route path="imoveis" element={<Properties />} />
                 <Route path="imoveis/:id" element={<PropertyForm />} />
@@ -90,6 +93,7 @@ const App = () => (
                 <Route index element={<Dashboard />} />
                 <Route path="imoveis" element={<PortalProperties />} />
                 <Route path="crm" element={<CRM />} />
+                <Route path="agenda" element={<Agenda />} />
                 <Route path="financeiro" element={<Financeiro />} />
                 <Route path="equipe" element={<Equipe />} />
               </Route>
