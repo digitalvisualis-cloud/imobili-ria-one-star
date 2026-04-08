@@ -82,11 +82,20 @@ export default function Financeiro() {
 
   return (
     <div className="space-y-6">
+      <div className="rounded-lg border border-blue-200 bg-blue-50 dark:border-blue-900 dark:bg-blue-950/30 p-4 text-sm text-blue-800 dark:text-blue-300">
+        💡 Neste plano, o lançamento financeiro é manual. Registre entradas e saídas diretamente aqui para manter seu controle atualizado.
+      </div>
+
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-display font-bold text-foreground">Financeiro</h1>
-        <Button onClick={() => setShowForm(true)}>
-          <Plus className="h-4 w-4 mr-2" /> Novo Registro
-        </Button>
+        <div className="flex gap-2">
+          <Button onClick={() => { setForm(f => ({ ...f, tipo: 'receita' })); setShowForm(true); }} className="bg-green-600 hover:bg-green-700">
+            <Plus className="h-4 w-4 mr-2" /> Nova Entrada
+          </Button>
+          <Button variant="destructive" onClick={() => { setForm(f => ({ ...f, tipo: 'despesa' })); setShowForm(true); }}>
+            <Plus className="h-4 w-4 mr-2" /> Nova Saída
+          </Button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
