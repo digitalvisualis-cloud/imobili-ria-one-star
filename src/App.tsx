@@ -32,6 +32,7 @@ import ApiDocs from "./pages/admin/ApiDocs";
 import ApiLogs from "./pages/admin/ApiLogs";
 import Users from "./pages/admin/Users";
 import Leads from "./pages/admin/Leads";
+import AdminAnalytics from "./pages/admin/Analytics";
 
 import Dashboard from "./pages/portal/Dashboard";
 import PortalProperties from "./pages/portal/PortalProperties";
@@ -69,6 +70,7 @@ const App = () => (
             <Route element={<ProtectedRoute allowedRoles={['admin', 'editor', 'viewer']} />}>
               <Route path="/admin" element={<AdminLayout />}>
                 <Route index element={<SiteConfig />} />
+                <Route path="analytics" element={<AdminAnalytics />} />
                 <Route path="imoveis" element={<Properties />} />
                 <Route path="imoveis/:id" element={<PropertyForm />} />
                 
