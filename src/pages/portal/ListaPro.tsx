@@ -66,6 +66,38 @@ export default function ListaPro() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<{ descricao: string; instagram: string } | null>(null);
   const [copied, setCopied] = useState<string | null>(null);
+  const [pdfLoading, setPdfLoading] = useState(false);
+
+  const downloadPdf = async () => {
+    if (!result) return;
+    setPdfLoading(true);
+    try {
+      await generateListingPdf({
+        tipo: form.tipo,
+        operacao: form.operacao,
+        endereco: form.endereco,
+        cidade: form.cidade,
+        estado: form.estado,
+        preco: Number(form.preco) || 0,
+        quartos: Number(form.quartos) || 0,
+        banheiros: Number(form.banheiros) || 0,
+        metros_construidos: Number(form.metros_construidos) || 0,
+        metros_terreno: Number(form.metros_terreno) || 0,
+        vagas: Number(form.vagas) || 0,
+        amenidades: form.amenidades,
+        descricao: result.descricao,
+        agente_nome: form.agente_nome,
+        agente_telefone: form.agente_telefone,
+        agente_email: form.agente_email,
+        imagens: form.imagens,
+      });
+      toast.success('PDF gerado');
+    } catch (e: any) {
+      toast.error(e?.message || 'Erro ao gerar PDF');
+    } finally {
+      setPdfLoading(false);
+    }
+  };
 
   const setField = <K extends keyof FormState>(k: K, v: FormState[K]) => setForm(p => ({ ...p, [k]: v }));
 
