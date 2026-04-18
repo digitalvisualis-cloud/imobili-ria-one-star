@@ -40,6 +40,7 @@ import CRM from "./pages/portal/CRM";
 import Agenda from "./pages/portal/Agenda";
 import Financeiro from "./pages/portal/Financeiro";
 import Equipe from "./pages/portal/Equipe";
+import ListaPro from "./pages/portal/ListaPro";
 import Integracoes from "./pages/admin/Integracoes";
 
 const queryClient = new QueryClient();
@@ -96,6 +97,7 @@ const App = () => (
                 <Route path="agenda" element={<Agenda />} />
                 <Route path="financeiro" element={<Financeiro />} />
                 <Route path="equipe" element={<Equipe />} />
+                <Route path="listapro" element={<ListaPro />} />
               </Route>
             </Route>
 
