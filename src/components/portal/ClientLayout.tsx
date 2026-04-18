@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Building2, Users, DollarSign, UserCog, ExternalLink, LogOut, CalendarDays } from 'lucide-react';
+import { LayoutDashboard, Building2, Users, DollarSign, UserCog, ExternalLink, LogOut, CalendarDays, Wand2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { useAuth, AppRole } from '@/contexts/AuthContext';
@@ -19,6 +19,7 @@ const navItems: NavItem[] = [
   { to: '/painel/crm', label: 'CRM', icon: Users, module: 'crm' },
   { to: '/painel/agenda', label: 'Agenda', icon: CalendarDays },
   { to: '/painel/financeiro', label: 'Financeiro', icon: DollarSign, module: 'financeiro' },
+  { to: '/painel/listapro', label: 'ListaPro', icon: Wand2 },
   { to: '/painel/equipe', label: 'Equipe', icon: UserCog, ownerOnly: true },
 ];
 
