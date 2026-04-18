@@ -309,6 +309,12 @@ export default function ListaPro() {
 
       {result && (
         <div className="space-y-4">
+          <div className="flex justify-end">
+            <Button onClick={downloadPdf} disabled={pdfLoading} size="lg" className="gap-2">
+              {pdfLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileDown className="h-4 w-4" />}
+              {pdfLoading ? 'Gerando PDF...' : 'Baixar PDF'}
+            </Button>
+          </div>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="text-lg">Descrição profissional</CardTitle>
