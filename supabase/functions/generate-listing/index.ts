@@ -6,20 +6,20 @@ const corsHeaders = {
 
 interface ListingPayload {
   tipo: string;
-  operacion: string;
-  direccion: string;
-  ciudad: string;
+  operacao: string;
+  endereco: string;
+  cidade: string;
   estado: string;
-  precio: number;
-  recamaras: number;
-  banos: number;
+  preco: number;
+  quartos: number;
+  banheiros: number;
   metros_construidos: number;
   metros_terreno: number;
-  estacionamientos: number;
+  vagas: number;
   amenidades: string[];
   destaque_agente: string;
-  agente_nombre: string;
-  agente_telefono: string;
+  agente_nome: string;
+  agente_telefone: string;
   agente_email: string;
 }
 
@@ -40,37 +40,37 @@ Deno.serve(async (req) => {
     const data = (await req.json()) as ListingPayload;
 
     // Basic validation
-    if (!data?.tipo || !data?.operacion || !data?.ciudad) {
-      return new Response(JSON.stringify({ error: "Campos obligatorios faltantes" }), {
+    if (!data?.tipo || !data?.operacao || !data?.cidade) {
+      return new Response(JSON.stringify({ error: "Campos obrigatórios faltando" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    const formatMXN = (n: number) =>
-      new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN", maximumFractionDigits: 0 }).format(n || 0);
+    const formatBRL = (n: number) =>
+      new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 }).format(n || 0);
 
-    const userPrompt = `Genera contenido profesional para una propiedad inmobiliaria en México.
+    const userPrompt = `Gere conteúdo profissional para um imóvel no mercado imobiliário brasileiro.
 
-DATOS:
+DADOS:
 - Tipo: ${data.tipo}
-- Operación: ${data.operacion}
-- Dirección: ${data.direccion}
-- Ciudad/Estado: ${data.ciudad}, ${data.estado}
-- Precio: ${formatMXN(data.precio)} MXN
-- Recámaras: ${data.recamaras}
-- Baños: ${data.banos}
-- Metros construidos: ${data.metros_construidos} m²
-- Metros de terreno: ${data.metros_terreno} m²
-- Estacionamientos: ${data.estacionamientos}
-- Amenidades: ${(data.amenidades || []).join(", ") || "ninguna especificada"}
-- Notas del agente: ${data.destaque_agente || "—"}
-- Agente: ${data.agente_nombre} | Tel: ${data.agente_telefono} | ${data.agente_email}
+- Finalidade: ${data.operacao}
+- Endereço: ${data.endereco}
+- Cidade/Estado: ${data.cidade}, ${data.estado}
+- Preço: ${formatBRL(data.preco)}
+- Quartos: ${data.quartos}
+- Banheiros: ${data.banheiros}
+- Área construída: ${data.metros_construidos} m²
+- Área do terreno: ${data.metros_terreno} m²
+- Vagas de garagem: ${data.vagas}
+- Diferenciais (amenidades): ${(data.amenidades || []).join(", ") || "nenhuma especificada"}
+- Destaques do corretor: ${data.destaque_agente || "—"}
+- Corretor: ${data.agente_nome} | Tel: ${data.agente_telefone} | ${data.agente_email}
 
-Devuelve EXACTAMENTE este formato JSON (sin markdown, sin texto extra):
+Retorne EXATAMENTE no formato JSON (sem markdown, sem texto extra):
 {
-  "descripcion": "descripción profesional larga estilo portal inmobiliario (3-4 párrafos), persuasiva, destacando ubicación, características y estilo de vida",
-  "instagram": "copy corto y atractivo para Instagram con emojis al inicio de líneas, llamada a la acción, y al final 12-15 hashtags relevantes del mercado inmobiliario mexicano (#VentaCasa #InmuebleMéxico #BienesRaícesMX etc.)"
+  "descricao": "descrição profissional longa em português do Brasil estilo portal imobiliário (3-4 parágrafos), persuasiva, destacando localização, características e estilo de vida",
+  "instagram": "copy curto e atrativo para Instagram em português do Brasil, com emojis no início das linhas, chamada para ação, e ao final 12-15 hashtags relevantes do mercado imobiliário brasileiro (#imovelavenda #casaavenda #imobiliaria #corretordeimoveis etc.)"
 }`;
 
     const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
@@ -85,7 +85,7 @@ Devuelve EXACTAMENTE este formato JSON (sin markdown, sin texto extra):
           {
             role: "system",
             content:
-              "Eres un copywriter experto en bienes raíces en México. Escribes en español mexicano, con tono profesional, cálido y persuasivo. Siempre devuelves JSON válido.",
+              "Você é um copywriter especialista em mercado imobiliário brasileiro. Escreve sempre em português do Brasil, com tom profissional, acolhedor e persuasivo. Sempre retorna JSON válido.",
           },
           { role: "user", content: userPrompt },
         ],
@@ -94,14 +94,14 @@ Devuelve EXACTAMENTE este formato JSON (sin markdown, sin texto extra):
             type: "function",
             function: {
               name: "publish_listing",
-              description: "Devuelve la descripción larga y el copy de Instagram",
+              description: "Retorna a descrição longa e o copy de Instagram em português do Brasil",
               parameters: {
                 type: "object",
                 properties: {
-                  descripcion: { type: "string", description: "Descripción profesional larga (3-4 párrafos)" },
-                  instagram: { type: "string", description: "Copy corto para Instagram con emojis y hashtags MX" },
+                  descricao: { type: "string", description: "Descrição profissional longa em PT-BR (3-4 parágrafos)" },
+                  instagram: { type: "string", description: "Copy curto para Instagram em PT-BR com emojis e hashtags BR" },
                 },
-                required: ["descripcion", "instagram"],
+                required: ["descricao", "instagram"],
                 additionalProperties: false,
               },
             },
@@ -113,20 +113,20 @@ Devuelve EXACTAMENTE este formato JSON (sin markdown, sin texto extra):
 
     if (!aiResp.ok) {
       if (aiResp.status === 429) {
-        return new Response(JSON.stringify({ error: "Límite de uso excedido. Inténtalo más tarde." }), {
+        return new Response(JSON.stringify({ error: "Limite de uso excedido. Tente novamente mais tarde." }), {
           status: 429,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
       if (aiResp.status === 402) {
         return new Response(
-          JSON.stringify({ error: "Créditos de IA agotados. Agrega fondos en tu workspace de Lovable." }),
+          JSON.stringify({ error: "Créditos de IA esgotados. Adicione créditos no seu workspace Lovable." }),
           { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } },
         );
       }
       const t = await aiResp.text();
       console.error("AI gateway error:", aiResp.status, t);
-      return new Response(JSON.stringify({ error: "Error en el gateway de IA" }), {
+      return new Response(JSON.stringify({ error: "Erro no gateway de IA" }), {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -135,7 +135,7 @@ Devuelve EXACTAMENTE este formato JSON (sin markdown, sin texto extra):
     const aiJson = await aiResp.json();
     const toolCall = aiJson?.choices?.[0]?.message?.tool_calls?.[0];
     const argsStr = toolCall?.function?.arguments;
-    let parsed: { descripcion: string; instagram: string } | null = null;
+    let parsed: { descricao: string; instagram: string } | null = null;
     if (argsStr) {
       try {
         parsed = JSON.parse(argsStr);
@@ -151,13 +151,13 @@ Devuelve EXACTAMENTE este formato JSON (sin markdown, sin texto extra):
         try {
           parsed = JSON.parse(content);
         } catch {
-          parsed = { descripcion: content, instagram: "" };
+          parsed = { descricao: content, instagram: "" };
         }
       }
     }
 
     if (!parsed) {
-      return new Response(JSON.stringify({ error: "Respuesta de IA vacía" }), {
+      return new Response(JSON.stringify({ error: "Resposta de IA vazia" }), {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -169,7 +169,7 @@ Devuelve EXACTAMENTE este formato JSON (sin markdown, sin texto extra):
   } catch (e) {
     console.error("generate-listing error:", e);
     return new Response(
-      JSON.stringify({ error: e instanceof Error ? e.message : "Error desconocido" }),
+      JSON.stringify({ error: e instanceof Error ? e.message : "Erro desconhecido" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
   }
