@@ -509,6 +509,42 @@ export type Database = {
           },
         ]
       }
+      listapro_jobs: {
+        Row: {
+          callback_url: string | null
+          created_at: string | null
+          erro: string | null
+          id: string
+          imovel_id: string | null
+          payload: Json | null
+          resultado: Json | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          callback_url?: string | null
+          created_at?: string | null
+          erro?: string | null
+          id?: string
+          imovel_id?: string | null
+          payload?: Json | null
+          resultado?: Json | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          callback_url?: string | null
+          created_at?: string | null
+          erro?: string | null
+          id?: string
+          imovel_id?: string | null
+          payload?: Json | null
+          resultado?: Json | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       login_attempts: {
         Row: {
           attempt_count: number | null
