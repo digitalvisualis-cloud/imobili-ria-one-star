@@ -263,6 +263,22 @@ export default function ListaPro() {
         </CardContent>
       </Card>
 
+      {/* Seletor de fotos do imóvel cadastrado */}
+      {selectedImovelId && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Fotos do imóvel</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ImageSelector
+              available={availableImages}
+              selected={form.imagens}
+              onChange={imgs => setField('imagens', imgs)}
+            />
+          </CardContent>
+        </Card>
+      )}
+
       <Card>
         <CardHeader>
           <CardTitle className="text-lg">Dados do imóvel</CardTitle>
