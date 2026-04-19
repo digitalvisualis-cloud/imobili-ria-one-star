@@ -77,14 +77,27 @@ export default function ListaPro() {
   const [copied, setCopied] = useState<string | null>(null);
   const [pdfLoading, setPdfLoading] = useState(false);
   const [selectedImovelId, setSelectedImovelId] = useState<string>('');
+  /** Fotos disponíveis no imóvel cadastrado (capa + imagens) */
+  const [availableImages, setAvailableImages] = useState<string[]>([]);
 
   const { data: imoveis = [], isLoading: loadingImoveis } = useAllImoveis();
 
   const importFromImovel = (id: string) => {
     setSelectedImovelId(id);
-    if (!id) return;
+    if (!id) {
+      setAvailableImages([]);
+      return;
+    }
     const im = imoveis.find((x: Imovel) => x.id === id);
     if (!im) return;
+    // Junta capa + imagens, removendo duplicatas e vazios
+    const allImgs = Array.from(
+      new Set(
+        [im.capa_url, ...(Array.isArray(im.imagens) ? im.imagens : [])]
+          .filter((u): u is string => typeof u === 'string' && u.length > 0)
+      )
+    );
+    setAvailableImages(allImgs);
     setForm(p => ({
       ...p,
       tipo: TIPO_DB_TO_LABEL[im.tipo] ?? p.tipo,
@@ -98,13 +111,14 @@ export default function ListaPro() {
       metros_construidos: im.area_m2 != null ? String(im.area_m2) : '',
       vagas: im.vagas != null ? String(im.vagas) : '',
       destaque_agente: im.descricao ?? p.destaque_agente,
-      imagens: Array.isArray(im.imagens) && im.imagens.length ? im.imagens : (im.capa_url ? [im.capa_url] : []),
+      imagens: allImgs, // todas selecionadas por padrão
     }));
-    toast.success(`Imóvel "${im.titulo}" carregado`);
+    toast.success(`Imóvel "${im.titulo}" carregado · ${allImgs.length} foto(s)`);
   };
 
   const clearSelection = () => {
     setSelectedImovelId('');
+    setAvailableImages([]);
     setForm(initialForm);
   };
 
