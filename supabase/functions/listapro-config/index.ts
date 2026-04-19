@@ -10,8 +10,8 @@ const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE_ROLE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY")!;
 
-// Single-tenant default identifier; multi-tenant projects can extend this.
-const DEFAULT_IMOBILIARIA_ID = "default";
+// Single-tenant identifier (mantém alinhado com a row criada pelo Claude no Supabase).
+const DEFAULT_IMOBILIARIA_ID = "onestar";
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
