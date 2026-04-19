@@ -217,6 +217,39 @@ export default function ListaPro() {
 
       <Card>
         <CardHeader>
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Building2 className="h-4 w-4 text-primary" /> Carregar imóvel cadastrado
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <p className="text-sm text-muted-foreground">
+            Selecione um imóvel da sua base para preencher os campos automaticamente, ou pule para cadastrar manualmente abaixo.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-2">
+            <Select value={selectedImovelId} onValueChange={importFromImovel} disabled={loadingImoveis}>
+              <SelectTrigger className="flex-1">
+                <SelectValue placeholder={loadingImoveis ? 'Carregando imóveis...' : 'Escolher imóvel...'} />
+              </SelectTrigger>
+              <SelectContent>
+                {imoveis.map(im => (
+                  <SelectItem key={im.id} value={im.id}>
+                    {im.codigo_imovel} — {im.titulo}{im.bairro ? ` · ${im.bairro}` : ''}
+                  </SelectItem>
+                ))}
+                {!imoveis.length && !loadingImoveis && (
+                  <div className="px-3 py-2 text-sm text-muted-foreground">Nenhum imóvel cadastrado</div>
+                )}
+              </SelectContent>
+            </Select>
+            {selectedImovelId && (
+              <Button variant="outline" onClick={clearSelection}>Limpar</Button>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
           <CardTitle className="text-lg">Dados do imóvel</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
