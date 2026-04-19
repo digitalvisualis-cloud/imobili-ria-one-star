@@ -12,6 +12,7 @@ import { supabase } from '@/integrations/supabase/client';
 import ImageUpload from '@/components/admin/ImageUpload';
 import { generateListingPdf } from '@/lib/listing-pdf';
 import { ListaProTrigger } from '@/components/listapro/ListaProTrigger';
+import { ImageSelector } from '@/components/listapro/ImageSelector';
 import { useAllImoveis } from '@/hooks/use-imoveis';
 import type { Imovel } from '@/lib/types';
 
