@@ -12,6 +12,7 @@ import { supabase } from '@/integrations/supabase/client';
 import ImageUpload from '@/components/admin/ImageUpload';
 import { generateListingPdf } from '@/lib/listing-pdf';
 import { ListaProTrigger } from '@/components/listapro/ListaProTrigger';
+import { ImageSelector } from '@/components/listapro/ImageSelector';
 import { useAllImoveis } from '@/hooks/use-imoveis';
 import type { Imovel } from '@/lib/types';
 
@@ -76,14 +77,27 @@ export default function ListaPro() {
   const [copied, setCopied] = useState<string | null>(null);
   const [pdfLoading, setPdfLoading] = useState(false);
   const [selectedImovelId, setSelectedImovelId] = useState<string>('');
+  /** Fotos disponíveis no imóvel cadastrado (capa + imagens) */
+  const [availableImages, setAvailableImages] = useState<string[]>([]);
 
   const { data: imoveis = [], isLoading: loadingImoveis } = useAllImoveis();
 
   const importFromImovel = (id: string) => {
     setSelectedImovelId(id);
-    if (!id) return;
+    if (!id) {
+      setAvailableImages([]);
+      return;
+    }
     const im = imoveis.find((x: Imovel) => x.id === id);
     if (!im) return;
+    // Junta capa + imagens, removendo duplicatas e vazios
+    const allImgs = Array.from(
+      new Set(
+        [im.capa_url, ...(Array.isArray(im.imagens) ? im.imagens : [])]
+          .filter((u): u is string => typeof u === 'string' && u.length > 0)
+      )
+    );
+    setAvailableImages(allImgs);
     setForm(p => ({
       ...p,
       tipo: TIPO_DB_TO_LABEL[im.tipo] ?? p.tipo,
@@ -97,13 +111,14 @@ export default function ListaPro() {
       metros_construidos: im.area_m2 != null ? String(im.area_m2) : '',
       vagas: im.vagas != null ? String(im.vagas) : '',
       destaque_agente: im.descricao ?? p.destaque_agente,
-      imagens: Array.isArray(im.imagens) && im.imagens.length ? im.imagens : (im.capa_url ? [im.capa_url] : []),
+      imagens: allImgs, // todas selecionadas por padrão
     }));
-    toast.success(`Imóvel "${im.titulo}" carregado`);
+    toast.success(`Imóvel "${im.titulo}" carregado · ${allImgs.length} foto(s)`);
   };
 
   const clearSelection = () => {
     setSelectedImovelId('');
+    setAvailableImages([]);
     setForm(initialForm);
   };
 
@@ -248,6 +263,22 @@ export default function ListaPro() {
         </CardContent>
       </Card>
 
+      {/* Seletor de fotos do imóvel cadastrado */}
+      {selectedImovelId && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Fotos do imóvel</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ImageSelector
+              available={availableImages}
+              selected={form.imagens}
+              onChange={imgs => setField('imagens', imgs)}
+            />
+          </CardContent>
+        </Card>
+      )}
+
       <Card>
         <CardHeader>
           <CardTitle className="text-lg">Dados do imóvel</CardTitle>
@@ -340,14 +371,16 @@ export default function ListaPro() {
             />
           </div>
 
-          {/* Fotos */}
-          <ImageUpload
-            images={form.imagens}
-            onImagesChange={imgs => setField('imagens', imgs)}
-            folder="listapro"
-            maxFiles={15}
-            label="Fotos do imóvel (a primeira será a capa)"
-          />
+          {/* Fotos — só upload manual quando NÃO há imóvel selecionado */}
+          {!selectedImovelId && (
+            <ImageUpload
+              images={form.imagens}
+              onImagesChange={imgs => setField('imagens', imgs)}
+              folder="listapro"
+              maxFiles={15}
+              label="Fotos do imóvel (a primeira será a capa)"
+            />
+          )}
 
           {/* Dados do corretor */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-border">
@@ -379,10 +412,12 @@ export default function ListaPro() {
         </CardContent>
       </Card>
 
-      {/* ListaPro pacote completo via Claude/n8n */}
+      {/* ListaPro pacote completo via Claude/n8n.
+          Sempre mandamos dadosManuais com as fotos selecionadas (o n8n usa essas
+          em vez das do banco quando vierem). */}
       <ListaProTrigger
         imovelId={selectedImovelId || null}
-        dadosManuais={selectedImovelId ? null : {
+        dadosManuais={{
           tipo: form.tipo,
           operacao: form.operacao,
           endereco: form.endereco,
@@ -400,6 +435,7 @@ export default function ListaPro() {
           agente_telefone: form.agente_telefone,
           agente_email: form.agente_email,
           imagens: form.imagens,
+          capa_url: form.imagens[0] ?? null,
         }}
       />
 
