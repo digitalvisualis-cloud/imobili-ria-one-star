@@ -2,3 +2,7 @@ project_id = "mlyeqkkcqfsivqhuoedm"
 
 [functions.generate-listing]
 verify_jwt = false
+
+[functions.listapro-callback]
+verify_jwt = false
+
