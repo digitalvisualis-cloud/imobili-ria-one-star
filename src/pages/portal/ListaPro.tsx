@@ -381,7 +381,8 @@ export default function ListaPro() {
 
       {/* ListaPro pacote completo via Claude/n8n */}
       <ListaProTrigger
-        dadosManuais={{
+        imovelId={selectedImovelId || null}
+        dadosManuais={selectedImovelId ? null : {
           tipo: form.tipo,
           operacao: form.operacao,
           endereco: form.endereco,
