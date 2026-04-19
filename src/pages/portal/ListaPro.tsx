@@ -371,14 +371,16 @@ export default function ListaPro() {
             />
           </div>
 
-          {/* Fotos */}
-          <ImageUpload
-            images={form.imagens}
-            onImagesChange={imgs => setField('imagens', imgs)}
-            folder="listapro"
-            maxFiles={15}
-            label="Fotos do imóvel (a primeira será a capa)"
-          />
+          {/* Fotos — só upload manual quando NÃO há imóvel selecionado */}
+          {!selectedImovelId && (
+            <ImageUpload
+              images={form.imagens}
+              onImagesChange={imgs => setField('imagens', imgs)}
+              folder="listapro"
+              maxFiles={15}
+              label="Fotos do imóvel (a primeira será a capa)"
+            />
+          )}
 
           {/* Dados do corretor */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-border">
@@ -410,10 +412,12 @@ export default function ListaPro() {
         </CardContent>
       </Card>
 
-      {/* ListaPro pacote completo via Claude/n8n */}
+      {/* ListaPro pacote completo via Claude/n8n.
+          Sempre mandamos dadosManuais com as fotos selecionadas (o n8n usa essas
+          em vez das do banco quando vierem). */}
       <ListaProTrigger
         imovelId={selectedImovelId || null}
-        dadosManuais={selectedImovelId ? null : {
+        dadosManuais={{
           tipo: form.tipo,
           operacao: form.operacao,
           endereco: form.endereco,
@@ -431,6 +435,7 @@ export default function ListaPro() {
           agente_telefone: form.agente_telefone,
           agente_email: form.agente_email,
           imagens: form.imagens,
+          capa_url: form.imagens[0] ?? null,
         }}
       />
 
