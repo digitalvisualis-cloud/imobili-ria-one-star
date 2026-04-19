@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Wand2, Copy, Check, Loader2, Sparkles, RefreshCw, FileDown } from 'lucide-react';
+import { Wand2, Copy, Check, Loader2, Sparkles, RefreshCw, FileDown, Building2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -12,6 +12,8 @@ import { supabase } from '@/integrations/supabase/client';
 import ImageUpload from '@/components/admin/ImageUpload';
 import { generateListingPdf } from '@/lib/listing-pdf';
 import { ListaProTrigger } from '@/components/listapro/ListaProTrigger';
+import { useAllImoveis } from '@/hooks/use-imoveis';
+import type { Imovel } from '@/lib/types';
 
 const TIPOS = ['Casa', 'Apartamento', 'Terreno', 'Cobertura', 'Sobrado', 'Chácara', 'Sítio', 'Comercial'];
 const OPERACOES = ['Venda', 'Aluguel', 'Venda e Aluguel'];
