@@ -64,12 +64,48 @@ const initialForm: FormState = {
   imagens: [],
 };
 
+const TIPO_DB_TO_LABEL: Record<string, string> = {
+  apartamento: 'Apartamento', casa: 'Casa', chacara: 'Chácara',
+  sitio: 'Sítio', terreno: 'Terreno', comercial: 'Comercial',
+};
+
 export default function ListaPro() {
   const [form, setForm] = useState<FormState>(initialForm);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<{ descricao: string; instagram: string } | null>(null);
   const [copied, setCopied] = useState<string | null>(null);
   const [pdfLoading, setPdfLoading] = useState(false);
+  const [selectedImovelId, setSelectedImovelId] = useState<string>('');
+
+  const { data: imoveis = [], isLoading: loadingImoveis } = useAllImoveis();
+
+  const importFromImovel = (id: string) => {
+    setSelectedImovelId(id);
+    if (!id) return;
+    const im = imoveis.find((x: Imovel) => x.id === id);
+    if (!im) return;
+    setForm(p => ({
+      ...p,
+      tipo: TIPO_DB_TO_LABEL[im.tipo] ?? p.tipo,
+      operacao: im.finalidade === 'aluguel' ? 'Aluguel' : 'Venda',
+      endereco: im.bairro ?? p.endereco,
+      cidade: im.cidade ?? '',
+      estado: im.estado ?? '',
+      preco: im.preco ? String(im.preco) : '',
+      quartos: im.quartos != null ? String(im.quartos) : '',
+      banheiros: im.banheiros != null ? String(im.banheiros) : '',
+      metros_construidos: im.area_m2 != null ? String(im.area_m2) : '',
+      vagas: im.vagas != null ? String(im.vagas) : '',
+      destaque_agente: im.descricao ?? p.destaque_agente,
+      imagens: Array.isArray(im.imagens) && im.imagens.length ? im.imagens : (im.capa_url ? [im.capa_url] : []),
+    }));
+    toast.success(`Imóvel "${im.titulo}" carregado`);
+  };
+
+  const clearSelection = () => {
+    setSelectedImovelId('');
+    setForm(initialForm);
+  };
 
   const downloadPdf = async () => {
     if (!result) return;
