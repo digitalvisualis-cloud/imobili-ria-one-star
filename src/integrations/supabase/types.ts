@@ -509,6 +509,39 @@ export type Database = {
           },
         ]
       }
+      listapro_config: {
+        Row: {
+          ativo: boolean | null
+          branding: Json | null
+          created_at: string | null
+          gemini_key: string | null
+          id: string
+          imobiliaria_id: string
+          webhook_secret: string
+          webhook_url: string
+        }
+        Insert: {
+          ativo?: boolean | null
+          branding?: Json | null
+          created_at?: string | null
+          gemini_key?: string | null
+          id?: string
+          imobiliaria_id: string
+          webhook_secret: string
+          webhook_url: string
+        }
+        Update: {
+          ativo?: boolean | null
+          branding?: Json | null
+          created_at?: string | null
+          gemini_key?: string | null
+          id?: string
+          imobiliaria_id?: string
+          webhook_secret?: string
+          webhook_url?: string
+        }
+        Relationships: []
+      }
       listapro_jobs: {
         Row: {
           callback_url: string | null
