@@ -14,6 +14,7 @@ import { toast } from 'sonner';
 import { ArrowLeft, Save } from 'lucide-react';
 import ImageUpload from '@/components/admin/ImageUpload';
 import VideoUpload from '@/components/admin/VideoUpload';
+import { ListaProTrigger } from '@/components/listapro/ListaProTrigger';
 
 export default function PropertyFormPage() {
   const { id } = useParams<{ id: string }>();
@@ -271,6 +272,11 @@ export default function PropertyFormPage() {
           </div>
         </CardContent>
       </Card>
+
+      {/* ListaPro */}
+      {isEdit && (
+        <ListaProTrigger imovelId={id ?? null} />
+      )}
 
       <div className="flex justify-end">
         <Button onClick={handleSave} disabled={createImovel.isPending || updateImovel.isPending}>

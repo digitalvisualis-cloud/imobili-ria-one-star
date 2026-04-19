@@ -11,6 +11,7 @@ import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import ImageUpload from '@/components/admin/ImageUpload';
 import { generateListingPdf } from '@/lib/listing-pdf';
+import { ListaProTrigger } from '@/components/listapro/ListaProTrigger';
 
 const TIPOS = ['Casa', 'Apartamento', 'Terreno', 'Cobertura', 'Sobrado', 'Chácara', 'Sítio', 'Comercial'];
 const OPERACOES = ['Venda', 'Aluguel', 'Venda e Aluguel'];
@@ -306,6 +307,29 @@ export default function ListaPro() {
           </div>
         </CardContent>
       </Card>
+
+      {/* ListaPro pacote completo via Claude/n8n */}
+      <ListaProTrigger
+        dadosManuais={{
+          tipo: form.tipo,
+          operacao: form.operacao,
+          endereco: form.endereco,
+          cidade: form.cidade,
+          estado: form.estado,
+          preco: Number(form.preco) || 0,
+          quartos: Number(form.quartos) || 0,
+          banheiros: Number(form.banheiros) || 0,
+          metros_construidos: Number(form.metros_construidos) || 0,
+          metros_terreno: Number(form.metros_terreno) || 0,
+          vagas: Number(form.vagas) || 0,
+          amenidades: form.amenidades,
+          destaque_agente: form.destaque_agente,
+          agente_nome: form.agente_nome,
+          agente_telefone: form.agente_telefone,
+          agente_email: form.agente_email,
+          imagens: form.imagens,
+        }}
+      />
 
       {result && (
         <div className="space-y-4">
