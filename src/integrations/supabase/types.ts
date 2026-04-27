@@ -22,6 +22,7 @@ export type Database = {
           created_at: string
           id: string
           module: Database["public"]["Enums"]["portal_module"]
+          tenant_id: string
           updated_at: string
           user_id: string
         }
@@ -32,6 +33,7 @@ export type Database = {
           created_at?: string
           id?: string
           module: Database["public"]["Enums"]["portal_module"]
+          tenant_id: string
           updated_at?: string
           user_id: string
         }
@@ -42,10 +44,19 @@ export type Database = {
           created_at?: string
           id?: string
           module?: Database["public"]["Enums"]["portal_module"]
+          tenant_id?: string
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "agent_permissions_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ai_config: {
         Row: {
@@ -56,6 +67,7 @@ export type Database = {
           max_tokens: number | null
           model: string
           provider: string
+          tenant_id: string
           updated_at: string
         }
         Insert: {
@@ -66,6 +78,7 @@ export type Database = {
           max_tokens?: number | null
           model?: string
           provider?: string
+          tenant_id: string
           updated_at?: string
         }
         Update: {
@@ -76,9 +89,18 @@ export type Database = {
           max_tokens?: number | null
           model?: string
           provider?: string
+          tenant_id?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ai_config_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ai_search_logs: {
         Row: {
@@ -93,6 +115,7 @@ export type Database = {
           result_ids: string[] | null
           results_count: number | null
           status: string
+          tenant_id: string
           tokens_used: number | null
         }
         Insert: {
@@ -107,6 +130,7 @@ export type Database = {
           result_ids?: string[] | null
           results_count?: number | null
           status?: string
+          tenant_id: string
           tokens_used?: number | null
         }
         Update: {
@@ -121,9 +145,18 @@ export type Database = {
           result_ids?: string[] | null
           results_count?: number | null
           status?: string
+          tenant_id?: string
           tokens_used?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ai_search_logs_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       api_keys: {
         Row: {
@@ -135,6 +168,7 @@ export type Database = {
           key_preview: string
           last_used_at: string | null
           name: string
+          tenant_id: string
         }
         Insert: {
           active?: boolean
@@ -145,6 +179,7 @@ export type Database = {
           key_preview: string
           last_used_at?: string | null
           name?: string
+          tenant_id: string
         }
         Update: {
           active?: boolean
@@ -155,8 +190,17 @@ export type Database = {
           key_preview?: string
           last_used_at?: string | null
           name?: string
+          tenant_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "api_keys_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       api_request_logs: {
         Row: {
@@ -209,6 +253,7 @@ export type Database = {
           nome: string
           observacoes: string | null
           telefone: string | null
+          tenant_id: string | null
           updated_at: string
         }
         Insert: {
@@ -220,6 +265,7 @@ export type Database = {
           nome: string
           observacoes?: string | null
           telefone?: string | null
+          tenant_id?: string | null
           updated_at?: string
         }
         Update: {
@@ -231,9 +277,18 @@ export type Database = {
           nome?: string
           observacoes?: string | null
           telefone?: string | null
+          tenant_id?: string | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "clientes_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       config_site: {
         Row: {
@@ -247,6 +302,7 @@ export type Database = {
           nome_imobiliaria: string
           politica_cookies: string | null
           politica_privacidade: string | null
+          tenant_id: string
           termos_uso: string | null
           updated_at: string
           whatsapp: string | null
@@ -262,6 +318,7 @@ export type Database = {
           nome_imobiliaria?: string
           politica_cookies?: string | null
           politica_privacidade?: string | null
+          tenant_id: string
           termos_uso?: string | null
           updated_at?: string
           whatsapp?: string | null
@@ -277,11 +334,20 @@ export type Database = {
           nome_imobiliaria?: string
           politica_cookies?: string | null
           politica_privacidade?: string | null
+          tenant_id?: string
           termos_uso?: string | null
           updated_at?: string
           whatsapp?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "config_site_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       financeiro: {
         Row: {
@@ -294,6 +360,7 @@ export type Database = {
           id: string
           negocio_id: string | null
           status: Database["public"]["Enums"]["financeiro_status"]
+          tenant_id: string | null
           tipo: Database["public"]["Enums"]["financeiro_tipo"]
           updated_at: string
           valor: number
@@ -308,6 +375,7 @@ export type Database = {
           id?: string
           negocio_id?: string | null
           status?: Database["public"]["Enums"]["financeiro_status"]
+          tenant_id?: string | null
           tipo: Database["public"]["Enums"]["financeiro_tipo"]
           updated_at?: string
           valor?: number
@@ -322,6 +390,7 @@ export type Database = {
           id?: string
           negocio_id?: string | null
           status?: Database["public"]["Enums"]["financeiro_status"]
+          tenant_id?: string | null
           tipo?: Database["public"]["Enums"]["financeiro_tipo"]
           updated_at?: string
           valor?: number
@@ -334,9 +403,16 @@ export type Database = {
             referencedRelation: "negocios"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "financeiro_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
         ]
       }
-      IMOBILIARIA_ANDRE: {
+      IMOBILIARIA_ANDRE_legacy: {
         Row: {
           "Bairro desejado": string | null
           "Data da visita": string | null
@@ -404,7 +480,14 @@ export type Database = {
       }
       imoveis: {
         Row: {
+          agencia_nome: string | null
+          agente_email: string | null
+          agente_nome: string | null
+          agente_telefone: string | null
+          amenidades: string[] | null
+          amenidades_outras: string | null
           area_m2: number | null
+          area_terreno_m2: number | null
           bairro: string | null
           banheiros: number | null
           capa_url: string | null
@@ -414,22 +497,43 @@ export type Database = {
           created_by: string | null
           descricao: string | null
           destaque: boolean | null
+          endereco: string | null
           estado: string | null
           finalidade: Database["public"]["Enums"]["finalidade_imovel"]
+          formatos_gerados: Json | null
+          gerado_at: string | null
+          guion_escenas: Json | null
           id: string
           imagens: string[] | null
           mapa_url: string | null
+          notas: string | null
+          pisos: number | null
           preco: number
           publicado: boolean | null
           quartos: number | null
+          status_geracao: Database["public"]["Enums"]["listapro_status"] | null
+          status_geracao_erro: string | null
+          suites: number | null
+          tenant_id: string
           tipo: Database["public"]["Enums"]["tipo_imovel"]
           titulo: string
           updated_at: string
           vagas: number | null
+          video_tipo: string | null
           video_url: string | null
+          voiceover_contexto: string | null
+          voiceover_tom: string | null
+          voiceover_voz: string | null
         }
         Insert: {
+          agencia_nome?: string | null
+          agente_email?: string | null
+          agente_nome?: string | null
+          agente_telefone?: string | null
+          amenidades?: string[] | null
+          amenidades_outras?: string | null
           area_m2?: number | null
+          area_terreno_m2?: number | null
           bairro?: string | null
           banheiros?: number | null
           capa_url?: string | null
@@ -439,22 +543,43 @@ export type Database = {
           created_by?: string | null
           descricao?: string | null
           destaque?: boolean | null
+          endereco?: string | null
           estado?: string | null
           finalidade?: Database["public"]["Enums"]["finalidade_imovel"]
+          formatos_gerados?: Json | null
+          gerado_at?: string | null
+          guion_escenas?: Json | null
           id?: string
           imagens?: string[] | null
           mapa_url?: string | null
+          notas?: string | null
+          pisos?: number | null
           preco?: number
           publicado?: boolean | null
           quartos?: number | null
+          status_geracao?: Database["public"]["Enums"]["listapro_status"] | null
+          status_geracao_erro?: string | null
+          suites?: number | null
+          tenant_id: string
           tipo?: Database["public"]["Enums"]["tipo_imovel"]
           titulo: string
           updated_at?: string
           vagas?: number | null
+          video_tipo?: string | null
           video_url?: string | null
+          voiceover_contexto?: string | null
+          voiceover_tom?: string | null
+          voiceover_voz?: string | null
         }
         Update: {
+          agencia_nome?: string | null
+          agente_email?: string | null
+          agente_nome?: string | null
+          agente_telefone?: string | null
+          amenidades?: string[] | null
+          amenidades_outras?: string | null
           area_m2?: number | null
+          area_terreno_m2?: number | null
           bairro?: string | null
           banheiros?: number | null
           capa_url?: string | null
@@ -464,39 +589,64 @@ export type Database = {
           created_by?: string | null
           descricao?: string | null
           destaque?: boolean | null
+          endereco?: string | null
           estado?: string | null
           finalidade?: Database["public"]["Enums"]["finalidade_imovel"]
+          formatos_gerados?: Json | null
+          gerado_at?: string | null
+          guion_escenas?: Json | null
           id?: string
           imagens?: string[] | null
           mapa_url?: string | null
+          notas?: string | null
+          pisos?: number | null
           preco?: number
           publicado?: boolean | null
           quartos?: number | null
+          status_geracao?: Database["public"]["Enums"]["listapro_status"] | null
+          status_geracao_erro?: string | null
+          suites?: number | null
+          tenant_id?: string
           tipo?: Database["public"]["Enums"]["tipo_imovel"]
           titulo?: string
           updated_at?: string
           vagas?: number | null
+          video_tipo?: string | null
           video_url?: string | null
+          voiceover_contexto?: string | null
+          voiceover_tom?: string | null
+          voiceover_voz?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "imoveis_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       imovel_views: {
         Row: {
           created_at: string
           id: string
           imovel_id: string
+          tenant_id: string
           viewer_hash: string
         }
         Insert: {
           created_at?: string
           id?: string
           imovel_id: string
+          tenant_id: string
           viewer_hash: string
         }
         Update: {
           created_at?: string
           id?: string
           imovel_id?: string
+          tenant_id?: string
           viewer_hash?: string
         }
         Relationships: [
@@ -505,6 +655,99 @@ export type Database = {
             columns: ["imovel_id"]
             isOneToOne: false
             referencedRelation: "imoveis"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "imovel_views_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      leads: {
+        Row: {
+          agendamento_id: string | null
+          bairro_desejado: string | null
+          chatwoot_account_id: string | null
+          chatwoot_conversation_id: string | null
+          chatwoot_inbox_id: string | null
+          chatwoot_lead_id: string | null
+          created_at: string
+          data_visita: string | null
+          finalidade: string | null
+          follow_up_1: string | null
+          follow_up_2: string | null
+          follow_up_3: string | null
+          id: string
+          identificador_lead: string | null
+          inicio_atendimento: string | null
+          marcou_no_grupo: string | null
+          nome: string | null
+          resumo_conversa: string | null
+          tenant_id: string
+          timestamp_ultima_msg: string | null
+          tipo_imovel: string | null
+          updated_at: string
+          whatsapp: string | null
+        }
+        Insert: {
+          agendamento_id?: string | null
+          bairro_desejado?: string | null
+          chatwoot_account_id?: string | null
+          chatwoot_conversation_id?: string | null
+          chatwoot_inbox_id?: string | null
+          chatwoot_lead_id?: string | null
+          created_at?: string
+          data_visita?: string | null
+          finalidade?: string | null
+          follow_up_1?: string | null
+          follow_up_2?: string | null
+          follow_up_3?: string | null
+          id?: string
+          identificador_lead?: string | null
+          inicio_atendimento?: string | null
+          marcou_no_grupo?: string | null
+          nome?: string | null
+          resumo_conversa?: string | null
+          tenant_id: string
+          timestamp_ultima_msg?: string | null
+          tipo_imovel?: string | null
+          updated_at?: string
+          whatsapp?: string | null
+        }
+        Update: {
+          agendamento_id?: string | null
+          bairro_desejado?: string | null
+          chatwoot_account_id?: string | null
+          chatwoot_conversation_id?: string | null
+          chatwoot_inbox_id?: string | null
+          chatwoot_lead_id?: string | null
+          created_at?: string
+          data_visita?: string | null
+          finalidade?: string | null
+          follow_up_1?: string | null
+          follow_up_2?: string | null
+          follow_up_3?: string | null
+          id?: string
+          identificador_lead?: string | null
+          inicio_atendimento?: string | null
+          marcou_no_grupo?: string | null
+          nome?: string | null
+          resumo_conversa?: string | null
+          tenant_id?: string
+          timestamp_ultima_msg?: string | null
+          tipo_imovel?: string | null
+          updated_at?: string
+          whatsapp?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leads_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
             referencedColumns: ["id"]
           },
         ]
@@ -517,6 +760,7 @@ export type Database = {
           gemini_key: string | null
           id: string
           imobiliaria_id: string
+          tenant_id: string
           webhook_secret: string
           webhook_url: string
         }
@@ -527,6 +771,7 @@ export type Database = {
           gemini_key?: string | null
           id?: string
           imobiliaria_id: string
+          tenant_id: string
           webhook_secret: string
           webhook_url: string
         }
@@ -537,10 +782,19 @@ export type Database = {
           gemini_key?: string | null
           id?: string
           imobiliaria_id?: string
+          tenant_id?: string
           webhook_secret?: string
           webhook_url?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "listapro_config_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       listapro_jobs: {
         Row: {
@@ -552,6 +806,7 @@ export type Database = {
           payload: Json | null
           resultado: Json | null
           status: string | null
+          tenant_id: string
           updated_at: string | null
         }
         Insert: {
@@ -563,6 +818,7 @@ export type Database = {
           payload?: Json | null
           resultado?: Json | null
           status?: string | null
+          tenant_id: string
           updated_at?: string | null
         }
         Update: {
@@ -574,9 +830,18 @@ export type Database = {
           payload?: Json | null
           resultado?: Json | null
           status?: string | null
+          tenant_id?: string
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "listapro_jobs_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       login_attempts: {
         Row: {
@@ -608,23 +873,91 @@ export type Database = {
         }
         Relationships: []
       }
+      messaging_conversations: {
+        Row: {
+          ai_active: boolean
+          assigned_to: string | null
+          chatwoot_conversation_id: string | null
+          created_at: string
+          id: string
+          last_message_at: string | null
+          lead_id: string | null
+          phone: string
+          status: string
+          tenant_id: string
+          updated_at: string
+        }
+        Insert: {
+          ai_active?: boolean
+          assigned_to?: string | null
+          chatwoot_conversation_id?: string | null
+          created_at?: string
+          id?: string
+          last_message_at?: string | null
+          lead_id?: string | null
+          phone: string
+          status?: string
+          tenant_id: string
+          updated_at?: string
+        }
+        Update: {
+          ai_active?: boolean
+          assigned_to?: string | null
+          chatwoot_conversation_id?: string | null
+          created_at?: string
+          id?: string
+          last_message_at?: string | null
+          lead_id?: string | null
+          phone?: string
+          status?: string
+          tenant_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messaging_conversations_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messaging_conversations_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       n8n_chat_histories: {
         Row: {
           id: number
           message: Json
           session_id: string
+          tenant_id: string
         }
         Insert: {
           id?: number
           message: Json
           session_id: string
+          tenant_id: string
         }
         Update: {
           id?: number
           message?: Json
           session_id?: string
+          tenant_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "n8n_chat_histories_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       negocios: {
         Row: {
@@ -638,6 +971,7 @@ export type Database = {
           imovel_id: string | null
           observacoes: string | null
           status: Database["public"]["Enums"]["negocio_status"]
+          tenant_id: string | null
           updated_at: string
           valor: number
         }
@@ -652,6 +986,7 @@ export type Database = {
           imovel_id?: string | null
           observacoes?: string | null
           status?: Database["public"]["Enums"]["negocio_status"]
+          tenant_id?: string | null
           updated_at?: string
           valor?: number
         }
@@ -666,6 +1001,7 @@ export type Database = {
           imovel_id?: string | null
           observacoes?: string | null
           status?: Database["public"]["Enums"]["negocio_status"]
+          tenant_id?: string | null
           updated_at?: string
           valor?: number
         }
@@ -684,7 +1020,59 @@ export type Database = {
             referencedRelation: "imoveis"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "negocios_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
         ]
+      }
+      plans: {
+        Row: {
+          ativo: boolean
+          created_at: string
+          descricao: string | null
+          features: Json
+          id: string
+          max_imoveis: number
+          max_usuarios: number
+          nome: string
+          ordem: number
+          preco_cents: number
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          ativo?: boolean
+          created_at?: string
+          descricao?: string | null
+          features?: Json
+          id?: string
+          max_imoveis?: number
+          max_usuarios?: number
+          nome: string
+          ordem?: number
+          preco_cents: number
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          ativo?: boolean
+          created_at?: string
+          descricao?: string | null
+          features?: Json
+          id?: string
+          max_imoveis?: number
+          max_usuarios?: number
+          nome?: string
+          ordem?: number
+          preco_cents?: number
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       profiles: {
         Row: {
@@ -713,6 +1101,175 @@ export type Database = {
         }
         Relationships: []
       }
+      subscriptions: {
+        Row: {
+          asaas_customer_id: string | null
+          asaas_subscription_id: string | null
+          canceled_at: string | null
+          created_at: string
+          current_period_end: string | null
+          current_period_start: string | null
+          id: string
+          last_event: string | null
+          last_event_at: string | null
+          plan_id: string
+          status: string
+          tenant_id: string
+          trial_ends_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          asaas_customer_id?: string | null
+          asaas_subscription_id?: string | null
+          canceled_at?: string | null
+          created_at?: string
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          last_event?: string | null
+          last_event_at?: string | null
+          plan_id: string
+          status?: string
+          tenant_id: string
+          trial_ends_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          asaas_customer_id?: string | null
+          asaas_subscription_id?: string | null
+          canceled_at?: string | null
+          created_at?: string
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          last_event?: string | null
+          last_event_at?: string | null
+          plan_id?: string
+          status?: string
+          tenant_id?: string
+          trial_ends_at?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "plans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subscriptions_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tenant_members: {
+        Row: {
+          created_at: string
+          id: string
+          is_default: boolean
+          role: string
+          tenant_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_default?: boolean
+          role: string
+          tenant_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_default?: boolean
+          role?: string
+          tenant_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tenant_members_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tenants: {
+        Row: {
+          active: boolean
+          asaas_customer_id: string | null
+          brand_kit: Json
+          chatwoot_account_id: string | null
+          cidade: string | null
+          created_at: string
+          estado: string | null
+          id: string
+          nome: string
+          plan: string
+          plan_id: string | null
+          slug: string
+          subscription_status: string
+          trial_ends_at: string | null
+          uazapi_instance_id: string | null
+          updated_at: string
+          whatsapp_number: string | null
+        }
+        Insert: {
+          active?: boolean
+          asaas_customer_id?: string | null
+          brand_kit?: Json
+          chatwoot_account_id?: string | null
+          cidade?: string | null
+          created_at?: string
+          estado?: string | null
+          id?: string
+          nome: string
+          plan?: string
+          plan_id?: string | null
+          slug: string
+          subscription_status?: string
+          trial_ends_at?: string | null
+          uazapi_instance_id?: string | null
+          updated_at?: string
+          whatsapp_number?: string | null
+        }
+        Update: {
+          active?: boolean
+          asaas_customer_id?: string | null
+          brand_kit?: Json
+          chatwoot_account_id?: string | null
+          cidade?: string | null
+          created_at?: string
+          estado?: string | null
+          id?: string
+          nome?: string
+          plan?: string
+          plan_id?: string | null
+          slug?: string
+          subscription_status?: string
+          trial_ends_at?: string | null
+          uazapi_instance_id?: string | null
+          updated_at?: string
+          whatsapp_number?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tenants_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           id: string
@@ -733,9 +1290,75 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      IMOBILIARIA_ANDRE: {
+        Row: {
+          "Bairro desejado": string | null
+          "Data da visita": string | null
+          Finalidade: string | null
+          "Follow UP 1": string | null
+          "Follow UP 2": string | null
+          "Follow UP 3": string | null
+          id_agendamento: string | null
+          "IDConta ChatWoot": string | null
+          "IDConversa ChatWoot": string | null
+          identificador_lead: string | null
+          "IDLead ChatWoot": string | null
+          "InboxID ChatWoot": string | null
+          "Inicio do atendimento": string | null
+          "Marcou no Grupo": string | null
+          Nome: string | null
+          "Resumo da conversa": string | null
+          "Timestamp ultima msg": string | null
+          "Tipo de imovel": string | null
+          Whatsapp: string | null
+        }
+        Insert: {
+          "Bairro desejado"?: string | null
+          "Data da visita"?: string | null
+          Finalidade?: string | null
+          "Follow UP 1"?: string | null
+          "Follow UP 2"?: string | null
+          "Follow UP 3"?: string | null
+          id_agendamento?: string | null
+          "IDConta ChatWoot"?: string | null
+          "IDConversa ChatWoot"?: string | null
+          identificador_lead?: string | null
+          "IDLead ChatWoot"?: string | null
+          "InboxID ChatWoot"?: string | null
+          "Inicio do atendimento"?: string | null
+          "Marcou no Grupo"?: string | null
+          Nome?: string | null
+          "Resumo da conversa"?: string | null
+          "Timestamp ultima msg"?: string | null
+          "Tipo de imovel"?: string | null
+          Whatsapp?: string | null
+        }
+        Update: {
+          "Bairro desejado"?: string | null
+          "Data da visita"?: string | null
+          Finalidade?: string | null
+          "Follow UP 1"?: string | null
+          "Follow UP 2"?: string | null
+          "Follow UP 3"?: string | null
+          id_agendamento?: string | null
+          "IDConta ChatWoot"?: string | null
+          "IDConversa ChatWoot"?: string | null
+          identificador_lead?: string | null
+          "IDLead ChatWoot"?: string | null
+          "InboxID ChatWoot"?: string | null
+          "Inicio do atendimento"?: string | null
+          "Marcou no Grupo"?: string | null
+          Nome?: string | null
+          "Resumo da conversa"?: string | null
+          "Timestamp ultima msg"?: string | null
+          "Tipo de imovel"?: string | null
+          Whatsapp?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
+      current_tenant_id: { Args: never; Returns: string }
       has_any_role: { Args: { _user_id: string }; Returns: boolean }
       has_module_access: {
         Args: {
@@ -752,13 +1375,36 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_member_of: { Args: { p_tenant: string }; Returns: boolean }
       is_portal_user: { Args: { _user_id: string }; Returns: boolean }
+      is_slug_available: { Args: { p_slug: string }; Returns: boolean }
+      provision_tenant: {
+        Args: {
+          p_asaas_customer_id: string
+          p_asaas_subscription_id: string
+          p_cidade: string
+          p_current_period_end: string
+          p_estado: string
+          p_logo_url: string
+          p_nome: string
+          p_plan_slug: string
+          p_primary_color: string
+          p_slug: string
+          p_user_id: string
+          p_whatsapp_number: string
+        }
+        Returns: {
+          tenant_id: string
+          tenant_slug: string
+        }[]
+      }
     }
     Enums: {
       app_role: "admin" | "editor" | "viewer" | "owner" | "manager" | "agent"
-      finalidade_imovel: "venda" | "aluguel"
+      finalidade_imovel: "venda" | "aluguel" | "temporada"
       financeiro_status: "pendente" | "pago" | "atrasado"
       financeiro_tipo: "receita" | "despesa"
+      listapro_status: "rascunho" | "gerando" | "pronto" | "erro"
       negocio_status: "prospeccao" | "negociacao" | "fechado" | "cancelado"
       portal_module: "imoveis" | "crm" | "financeiro" | "dashboard"
       tipo_imovel:
@@ -768,6 +1414,11 @@ export type Database = {
         | "sitio"
         | "terreno"
         | "comercial"
+        | "cobertura"
+        | "studio"
+        | "sala_comercial"
+        | "loja"
+        | "galpao"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -896,9 +1547,10 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "editor", "viewer", "owner", "manager", "agent"],
-      finalidade_imovel: ["venda", "aluguel"],
+      finalidade_imovel: ["venda", "aluguel", "temporada"],
       financeiro_status: ["pendente", "pago", "atrasado"],
       financeiro_tipo: ["receita", "despesa"],
+      listapro_status: ["rascunho", "gerando", "pronto", "erro"],
       negocio_status: ["prospeccao", "negociacao", "fechado", "cancelado"],
       portal_module: ["imoveis", "crm", "financeiro", "dashboard"],
       tipo_imovel: [
@@ -908,6 +1560,11 @@ export const Constants = {
         "sitio",
         "terreno",
         "comercial",
+        "cobertura",
+        "studio",
+        "sala_comercial",
+        "loja",
+        "galpao",
       ],
     },
   },
