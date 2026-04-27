@@ -22,6 +22,7 @@ const AMENIDADES_LIST = [
   'Playground', 'Quadra esportiva', 'Garagem coberta',
   'Elevador', 'Área de lazer', 'Pet friendly', 'Vista panorâmica',
   'Sacada', 'Jardim', 'Espaço gourmet', 'Sauna',
+  'Quintal', 'Mobiliado', 'Sem mobilia', 'Varanda gourmet',
 ];
 
 export default function PropertyFormPage() {
